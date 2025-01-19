@@ -3,7 +3,7 @@
 ## Members
 
 - Ziqi(Lydia) Liu <ziqil@uchicago.edu>
-- Name <name@uchicago.edu>
+- Alejandro Armas <alarmasb@uchicago.edu>
 - Name <name@uchicago.edu>
 - Name <name@uchicago.edu>
 
