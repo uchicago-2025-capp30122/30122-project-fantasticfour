@@ -4,7 +4,7 @@
 
 - Ziqi(Lydia) Liu <ziqil@uchicago.edu>
 - Alejandro Armas <alarmasb@uchicago.edu>
-- Name <name@uchicago.edu>
+- Rongruo(Yuri) Chang <yurichang@uchicago.edu>
 - Name <name@uchicago.edu>
 
 ## Abstract
