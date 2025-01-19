@@ -1,7 +1,8 @@
-# {Team Name}
+# {Fantastic Four}
 
 ## Members
 
+- Ziqi(Lydia) Liu <ziqil@uchicago.edu>
 - Name <name@uchicago.edu>
 - Name <name@uchicago.edu>
 - Name <name@uchicago.edu>
@@ -17,34 +18,31 @@ The results will be presented via an interactive web-based map, created with too
 
 ## Preliminary Data Sources
 
-For each source please add a section with the following:
-
 ### Data Source #1: city of chicago
 
 https://data.cityofchicago.org/
 
-Type: Webpage
-Retrieve Methods: Open-source CSV files
-Useful Information: We will use datasets related to education, parks & recreation, health, transportation, public safety, and food from this website. These datasets will form the core metrics influencing people’s decisions on whether to live in a specific area.
-Potential Challenges: Since the datasets are diverse and some contain large amounts of data, we might need to sample metrics with excessive data volume during later stages. Additionally, extensive data preprocessing will be required, such as standardizing data ranges to ensure uniformity.
+  - Type: Webpage
+  - Retrieve Methods: Open-source CSV files
+  - Useful Information: We will use datasets related to education, parks & recreation, health, transportation, public safety, and food from this website. These datasets will form the core metrics influencing people’s decisions on whether to live in a specific area.
+  - Potential Challenges: Since the datasets are diverse and some contain large amounts of data, we might need to sample metrics with excessive data volume during later stages. Additionally, extensive data preprocessing will be required, such as standardizing data ranges to ensure uniformity.
 
 ### Data Source #2: real estate website
 
 https://www.zillow.com/
 https://www.realtor.com/
 
-Type: API
-Useful Information: We will use these real estate websites to gather the addresses of housing spots in Chicago. These addresses will be linked with other core metrics.
-Potential Challenges: Initial research suggests that scraping data from Zillow is feasible; however, if any issues arise, Realtor will serve as a backup option.
+  - Type: API
+  - Useful Information: We will use these real estate websites to gather the addresses of housing spots in Chicago. These addresses will be linked with other core metrics.
+  - Potential Challenges: Initial research suggests that scraping data from Zillow is feasible; however, if any issues arise, Realtor will serve as a backup option.
 
 ### Data Source #3: geographic information
 
 https://data.cityofchicago.org/
 
-Type: Webpage
-Useful Information: We will retrieve geographic boundaries of Chicago, specifically GeoJSON files, to aid in visualizing geographical boundaries.
+  - Type: Webpage
+  - Useful Information: We will retrieve geographic boundaries of Chicago, specifically GeoJSON files, to aid in visualizing geographical boundaries.
 
-Project Plan
 
 ## Preliminary Project Plan
 
