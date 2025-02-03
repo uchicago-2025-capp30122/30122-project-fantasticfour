@@ -15,9 +15,10 @@ To standardize our evaluation process, we have decided to adopt a structured **L
 
 
 ## Data Sources
-Please review the following table for a quick overview of the indexes affecting livability scores and their corresponding data sources.
+Please review the following table for a quick overview of the indexes affecting livability scores and their corresponding data sources. We make sure that all datasets has **"zip code"** as the variable to link all together.
 
 #### Indicators & Weights
+##### Notes: all the source tagged as "Under Consideration" is because we can only find over unstructured datasets for now, so we will decide whether we would like to deal with these datasets during next week's discussion; if not, we will redistribute the indexes weight.
 
 | Category               | Indicator                           | Weight (%) | Source  |
 |------------------------|------------------------------------|------------|------------------------------------------------------|
@@ -26,17 +27,17 @@ Please review the following table for a quick overview of the indexes affecting 
 |                        | Health Insurance Coverage               | 3%         | United States Census Bureau|
 | **Real Estate & Housing** | Median Rent Price                | 10%        | Zillow  |
 |                        | Real Estate Price per sqft        | 8%         | Zillow  |
-| **Infrastructure**      | Public Transport Accessibility    | 7%         | United States Census Bureau |
+| **Infrastructure**      | Public Transport Accessibility    | 6%         | United States Census Bureau |
 |                        | Traffic Congestion                | 7%         | United States Census Bureau |
 |                        | Commute Time                      | 6%         | United States Census Bureau |
 |                        | Walkability Score                 | 5%         | Under Consideration |
-| **Safety & Healthcare** | Crime Rate                        | 8%         | portal |
-|                        | Healthcare Quality/access         | 7%         | portal (May need to find the right variable) |
-| **Environment & Climate** | Pollution Index                 | 5%         | portal |
-|                        | Air Quality Index                 | 5%         | EPA/local pollution monitoring |
-|                        | Green Space & Parks Access       | 5%         | portal |
-| **Social & Cultural**   | Education Quality                 | 6%         | portal |
-|                        | Cultural & Recreational           | 5%         | portal |
+| **Safety & Healthcare** | Crime Rate                        | 8%         | city of chicago |
+|                        | Healthcare Quality/access         | 7%         | Under Consideration |
+| **Environment & Climate** | Pollution Index                 | 5%         | city of chicago |
+|                        | Air Quality Index                 | 5%         | Under Consideration |
+|                        | Green Space & Parks Access       | 5%         | city of chicago |
+| **Social & Cultural**   | Education Quality                 | 11%         | city of chicago |
+
 
 
 ### Data Source #1: city of chicago, United States Census Bureau
@@ -48,26 +49,48 @@ https://data.census.gov/
   - Type: Webpage
   - Retrieve Methods: Open-source CSV files
   #### United States Census Bureau
-      - For Ecomonic & Infrastructure indexes
-      - Description:
-          - 53 rows
-          - 137 columns (variables)
-      - Insights from the Data
-        - Economic Activity: Employment rates and income distribution.
-        - Economic Inequality: Poverty levels.
-        - Quality of Life: Commuting times, healthcare access, and reliance on public assistance.
-        - To assess the economic conditions and affordability of different neighborhoods in Chicago, we have selected the most relevant variables from the Census dataset. These indicators will help evaluate job availability, income distribution, poverty levels, and access to essential services factors that directly influence livability.
+      For Ecomonic & Infrastructure indexes
+      Description:
+          53 rows
+          137 columns (variables)
+      Insights from the Data
+        Economic Activity: Employment rates and income distribution.
+        Economic Inequality: Poverty levels.
+        Quality of Life: Commuting times, healthcare access, and reliance on public assistance.
+        To assess the economic conditions and affordability of different neighborhoods in Chicago, we have selected the most relevant variables from the Census dataset. These indicators will help evaluate job availability, income distribution, poverty levels, and access to essential services factors that directly influence livability.
 
   #### city of chicago
-      - For Ecomonic & Infrastructure indexes
-      - Description:
-          - 53 rows
-          - 137 columns (variables)
-      - Insights from the Data
-        - Economic Activity: Employment rates and income distribution.
-        - Economic Inequality: Poverty levels.
-        - Quality of Life: Commuting times, healthcare access, and reliance on public assistance.
-        - To assess the economic conditions and affordability of different neighborhoods in Chicago, we have selected the most relevant variables from the Census dataset. These indicators will help evaluate job availability, income distribution, poverty levels, and access to essential services factors that directly influence livability.
+      1. For Safety & Healthcare indexes
+      Description:
+          256999 rows
+          22 columns (variables)
+      Insights from the Data (useful variables for our project)
+        Type of Crime: Indicate the type of crime that was committed.
+        Description: Give a more detailed description of what happened
+        Arrest: A dummy variable that indicates if an arrest was made
+        Domestic: A dummy variable that indicates if the crime was domestic.
+        FBI Code: An FBI code that allows to know the specifics of the crime committed
+
+      2. For Environment & Climate indexes
+      Description:
+          253699 rows
+          18 columns (variables)
+      Insights from the Data (useful variables for our project):
+        Inspection Category: Indicate the type of inspection that was required.
+        Description: Give a more detailed description of what type of environmental problem was occurring (illegal dump, air pollution, etc.)
+
+
+       3. Education indexes
+       Description:
+          661 rows
+          161 columns (variables)
+       Insights from the Data (useful variables for our project):
+          Public School Indicators
+          Student Growth Rating: Student Growth measures the change in standardized test scores between two points in time. This growth is compared to the average national growth for schools that started with similar scores in 2015.
+          Culture Climate Rating: This school is “Organized for Improvement” which means that the school has a strong culture and climate with only a few areas for improvement.
+          Healthy School Certification: Students learn better at healthy schools
+          Creative School: This school is Developing in the arts. It occasionally meets the goals and priorities of the CPS Arts Education Plan including Staffing & Instruction, Partnerships, Community & Culture and Budget & Planning.
+          Other variables:  Concerning the growth of the school’s student per subject, as well as the way it engages with the parents.
 
 
 
