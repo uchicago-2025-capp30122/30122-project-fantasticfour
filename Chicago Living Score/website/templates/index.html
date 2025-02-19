@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chicago Map</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #E3F2FD; 
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .full-height {
+      height: 100%;
+    }
+    .sidebar {
+      background-color: #FFFFFF;
+      border-right: 4px solid #0D47A1;
+      padding: 20px;
+    }
+    .sidebar h1 {
+      color: #0D47A1;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .sidebar .btn {
+      background-color: #2196F3;
+      border-color: #2196F3;
+    }
+    .sidebar .btn:hover {
+      background-color: #0D47A1;
+      border-color: #0D47A1;
+    }
+    .score-card {
+      background-color: #BBDEFB;
+      padding: 15px;
+      margin-top: 10px;
+      border-radius: 8px;
+      color: #0D47A1;
+    }
+    .map-container {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+    }
+    /* Let Map Self-Adjust */
+    .map-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+<div class="container-fluid full-height">
+  <div class="row full-height">
+    <!-- Search Bar -->
+    <div class="col-md-3 col-sm-12 sidebar d-flex flex-column justify-content-start">
+      <h1>Chicago Area Living Score 🌆</h1>
+      <form action="/search" method="post">
+        <div class="form-group">
+          <label for="zipcode" class="font-weight-bold">Enter Zip Code:</label>
+          <input type="text" id="zipcode" name="zipcode" class="form-control" placeholder="e.g. 60614" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Search</button>
+      </form>
+
+      {% if zip_data %}
+      <div class="score-card">
+        <h5 class="mb-3">Zip Code: {{ zip_data.zipcode }} </h5>
+        <p>Education Score: {{ zip_data.education_score }}</p>
+        <p>Crime Score: {{ zip_data.crime_score }}</p>
+        <p>Housing Score: {{ zip_data.housing_score }}</p>
+        <p>Overall Score: {{ zip_data.overall_score }}</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-9 col-sm-12 map-container">
+      {{ map_html|safe }}
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+
