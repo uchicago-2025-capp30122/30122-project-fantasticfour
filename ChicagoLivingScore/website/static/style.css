@@ -1,0 +1,26 @@
+body {
+  background-color: #E3F2FD; 
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  color: #333;
+}
+
+
+h1, .navbar-brand {
+  font-weight: 800;
+}
+
+.jumbotron {
+  border-radius: 10px;
+}
+
+/* 让按钮更圆润 */
+.btn {
+  border-radius: 25px;
+}
+
+/* 让卡片或搜索框带有小阴影 */
+.card, .form-control {
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+  
