@@ -1,0 +1,70 @@
+<!-- About Page-->
+{% extends "base.html" %}
+{% block content %}
+
+<div class="jumbotron text-center" style="background-color: #BBDEFB; padding: 2rem; margin-bottom: 0;">
+  <h1 style="font-size: 2.5rem; font-weight: 700; color: #0D47A1;">
+    Chicago Living Scores ✨
+  </h1>
+  <p class="lead" style="font-size: 1.2rem;">
+    Wanna find the best place to live in Chicago?
+    Our project analyzes various metrics such as housing, education, crime, etc.
+  </p>
+</div>
+
+<!-- Constcuct Navigation Buttons -->
+<!-- Keep color style harmony -->
+<div class="container-fluid" style="background-color: #E1F5FE; padding: 1rem 0;">
+  <div class="row justify-content-center">
+    <div class="col-auto mb-2">
+      <!-- Link to About route -->
+      <a href="{{ url_for('about') }}" class="btn"   
+         style="background-color: #BBDEFB; color: #0D47A1; font-weight: 600; min-width: 100px;">
+        About
+      </a>
+    </div>
+    <div class="col-auto mb-2">
+      <!-- Link to Service route -->
+      <a href="{{ url_for('service') }}" class="btn" 
+         style="background-color: #90CAF9; color: #0D47A1; font-weight: 600; min-width: 100px;">
+        Service
+      </a>
+    </div>
+    <div class="col-auto mb-2">
+      <!-- Link to Analysis route -->
+      <a href="{{ url_for('analysis') }}" class="btn" 
+         style="background-color: #64B5F6; color: #fff; font-weight: 600; min-width: 100px;">
+        Analysis
+      </a>
+    </div>
+    <div class="col-auto mb-2">
+      <!-- Link to Github route -->
+      <a href="{{ url_for('github') }}" class="btn" 
+         style="background-color: #2196F3; color: #fff; font-weight: 600; min-width: 100px;">
+        Github
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Construct Content of About Page: Project Overview + Map -->
+<div class="container" style="margin-top: 2rem;">
+  <div class="row">
+    <div class="col-md-5 mb-4">
+      <h2>Project Overview 🍀</h2>
+      <p>
+        ...
+      </p>
+    </div>
+    <div class="col-md-7">
+      <h2>Chicago Map 🗺</h2>
+      <div style="height: 500px;">
+        {{ map_html|safe }}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+

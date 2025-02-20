@@ -1,0 +1,37 @@
+<!-- Service Page-->
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <!-- Left column: Search input and results card -->
+  <div class="col-md-4">   
+    <h5>Enter Zip Code to Search Living Scores</h5>
+    <form action="{{ url_for('service') }}" method="POST">  <!-- Form that calls the 'service' route -->
+      <div class="form-group">
+        <input type="text" name="zipcode" id="zipcode" class="form-control" placeholder="Example: 60614" required>
+      </div>
+      <button type="submit" class="btn btn-success btn-block">Search</button>
+    </form>
+    
+    <!-- If zip_data exists, display the corresponding scores in a card -->
+    {% if zip_data %}
+    <div class="card mt-3"> 
+      <div class="card-body">
+        <h5 class="card-title">Zip Code: {{ zip_data.zipcode }}</h5>
+        <p>Education Score: {{ zip_data.education_score }}</p>
+        <p>Crime Score: {{ zip_data.crime_score }}</p>
+        <p>Housing Score: {{ zip_data.housing_score }}</p>
+        <p>Overall Score: {{ zip_data.overall_score }}</p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Right column: Display the map -->
+  <div class="col-md-8">
+    <h3>Chicago Map 🗺</h3>
+    <div style="height: 600px;">
+      {{ map_html|safe }}
+    </div>
+  </div>
+</div>
+{% endblock %}
