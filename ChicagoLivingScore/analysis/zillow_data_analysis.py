@@ -1,6 +1,5 @@
 import warnings
 warnings.simplefilter(action="ignore", category=FutureWarning)
-
 import json
 import os
 import pathlib
@@ -107,7 +106,7 @@ if __name__ == '__main__':
 
     processor = HousingDataProcessor()
 
-    input_csv = '/Users/apple/Desktop/Housing_Data.csv'
-    final_csv = '/Users/apple/Desktop/Housing_Data_Final.csv'
+    input_csv = base_dir.parent / "data" / "raw_data/raw_zillow_data" / "Housing_Data.csv"
+    final_csv = base_dir.parent / "data" / "cleaned_data" / "Housing_Data_Final.csv"
 
     processor.process_housing_data(input_csv, final_csv)
