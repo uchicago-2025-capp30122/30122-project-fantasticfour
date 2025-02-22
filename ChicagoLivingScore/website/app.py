@@ -31,7 +31,7 @@ def get_chicago_zip_geo():
     objectid_lst = cssscraper(root, "objectid")
     
     data = []
-    for i in range(1, len(polygon_lst)):
+    for i in range(0, len(polygon_lst)):
         data.append([polygon_lst[i], zip_lst[i], objectid_lst[i]])
     df = pd.DataFrame(data, columns=['geometry','zip','objectid'])
     df['geometry'] = df['geometry'].apply(wkt.loads)
