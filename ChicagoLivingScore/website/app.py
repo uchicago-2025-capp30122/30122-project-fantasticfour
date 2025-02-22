@@ -6,6 +6,10 @@ from shapely import wkt
 import httpx
 import lxml.html
 import pathlib
+import webbrowser
+from threading import Timer
+import os
+
 
 app = Flask(__name__)
 
@@ -190,5 +194,11 @@ def get_zip_data(zipcode):
     return jsonify(data)
 
 
+def open_browser():
+    if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+        webbrowser.open_new("http://127.0.0.1:5001/")
+
+
 if __name__ == "__main__":
+    Timer(1, open_browser).start()
     app.run(host="0.0.0.0", port=5001, debug=True)
