@@ -5,19 +5,9 @@ import geopandas as gpd
 import csv
 import joblib
 import pandas as pd
-"""shapefile_path = pathlib.Path("path/to/shapefile.shp")
-tracts = load_shapefiles(shapefile_path)"""
 
 def load_shapefile_with_cache(shp_path: pathlib.Path, cache_path: pathlib.Path = pathlib.Path("cached_shapefile.pkl")) -> gpd.GeoDataFrame:
     """
-    Carga un shapefile y lo guarda en caché para un acceso más rápido en el futuro.
-    
-    Parámetros:
-        shp_path: Ruta al archivo .shp.
-        cache_path: Ruta al archivo de caché (por defecto 'cached_shapefile.pkl').
-    
-    Retorna:
-        Un GeoDataFrame con los datos del shapefile.
     """
     try:
         gdf = joblib.load(cache_path)
