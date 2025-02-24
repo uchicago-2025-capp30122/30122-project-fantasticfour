@@ -1,0 +1,21 @@
+<!-- Analysis Page-->
+{% extends "base.html" %}
+{% block content %}
+<h3 class="text-center mb-4">Analysis 🧐</h3>
+<p class="text-center">Input a zip code or a keyword (e.g. “school”) to get advanced analysis.</p>
+
+
+<div class="analysis-form" style="max-width: 600px; margin: 0 auto;">
+  <form action="{{ url_for('analysis') }}" method="POST" class="form-inline justify-content-center">
+    <input type="text" name="query" class="form-control form-control-lg mr-2" placeholder="60614 or school" required>
+    <button type="submit" class="btn btn-info btn-lg">Analyze</button>
+  </form>
+</div>
+
+{% if results %}
+<div class="alert alert-primary mt-4 text-center" style="max-width: 600px; margin: 20px auto;">
+  {{ results }}
+</div>
+{% endif %}
+{% endblock %}
+
