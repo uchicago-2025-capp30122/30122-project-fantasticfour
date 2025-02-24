@@ -1,5 +1,10 @@
 ### Team Members
 
+- Lydia Liu
+- Yuri Chang
+- Hamza Tariq
+- Alejandro Armas
+
 
 ### Abstract
 This project develops an interactive, map-based platform to help individuals—especially those considering a move to Chicago—assess potential housing options. By incorporating data on education resources, transit infrastructure, public services, safety, and healthcare facilities near a chosen location, the platform offers a comprehensive overview of an area's livability.
@@ -67,6 +72,10 @@ This project is structured in the following section
         main scraper function(\zillow.py)
       
         change url for scraping (\run.py)
+
+- Analysis(\analysis)
+    - core data analysis functions regarding all metrics
+    - example: functions to convert unstructured housing data, clean and normalize dataset, generate new metrics which fits our project goal
 
 - Map and Spatial Analysis(\map)
 
