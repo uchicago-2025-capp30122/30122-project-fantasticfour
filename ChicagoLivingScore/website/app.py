@@ -3,6 +3,7 @@ import folium
 import geopandas as gpd
 import pandas as pd
 from shapely import wkt
+from shapely.geometry import Point
 import httpx
 import lxml.html
 import pathlib
@@ -72,6 +73,44 @@ def create_map(selected_zip=None):
         folium.Popup(row["zip"]).add_to(geo)
         geo.add_to(m)
     return m
+
+def map_add_schools(m):
+    DATA_FILE = BASE_DIR / ".." / "data" / "raw_data" / "edcation.csv"
+    
+    original_df = gpd.read_file(DATA_FILE)
+    original_df["geometry"] = original_df.apply(lambda row: Point(row['School_Longitude'], row['School_Latitude']), axis=1)
+    gdf_edu = gpd.GeoDataFrame(original_df[['School_ID', 'Short_Name', 'Long_Name', 'School_Type','School_Latitude','School_Longitude','Website',"Creative_School_Certification","geometry"]]) # use variables we need
+    gdf_edu['href'] = '<a href="' + gdf_edu.Website + '">' + gdf_edu.Website + "</a>"
+
+    school_type = gdf_edu["School_Type"].unique()
+    big_schools = ("Neighborhood","Charter","Citywide-Option")
+    radius_index = {school:80 if school in big_schools else 60 for school in school_type} # generally bigger school has bigger radius
+
+    school_rate = gdf_edu['Creative_School_Certification'].unique()
+    colors = ['green','blue','yellow','grey','brown','white']
+    color_index = {school_rate[i]: colors[i] for i in range(len(colors))} 
+    # better schools will have blue and green, worse schools will have yellowand brown,
+    # no data or incomplete will have white or grey
+
+    gdf_edu.set_crs(epsg=4326, inplace=True) # set the geo information
+
+
+    folium.GeoJson( # add markers on the map
+        gdf_edu,
+        name="schools",
+        marker=folium.Circle(radius=4, fill_color="orange", fill_opacity=0.4, color="black", weight=1),
+        tooltip=folium.GeoJsonTooltip(fields=['School_ID', 'Long_Name',"School_Type"]), # show these labels
+        popup=folium.GeoJsonPopup(fields=['School_ID', 'Long_Name', "href"]), # show these labels when click on
+        style_function=lambda x: {
+            "fillColor": color_index.get(x['properties']['Creative_School_Certification'],2),
+            "radius":  radius_index.get(x['properties']['School_Type']), # set fillcolor and radius based on certification and school type
+        },
+        highlight_function=lambda x: {"fillOpacity": 0.8},
+        zoom_on_click=True,
+    ).add_to(m)
+
+    return m
+
 
 
 # Construct the main page (About page)
