@@ -66,11 +66,11 @@ def create_map(selected_zip=None):
     return m
 
 def map_add_schools(m, selected_zip=None):
-    DATA_FILE = BASE_DIR / ".." / "data" / "raw_data" / "education.csv"
-    
+    DATA_FILE = BASE_DIR / ".." / "data" / "cleaned_data"/"cleaned_education.csv"
+
     original_df = gpd.read_file(DATA_FILE)
     original_df["geometry"] = original_df.apply(lambda row: Point(row['School_Longitude'], row['School_Latitude']), axis=1)
-    gdf_edu = gpd.GeoDataFrame(original_df[['School_ID', 'Short_Name', 'Long_Name', 'School_Type','School_Latitude','School_Longitude','Website',"Creative_School_Certification","geometry"]]) # use variables we need
+    gdf_edu = gpd.GeoDataFrame(original_df) # use variables we need
     
     # If we have a selected_zip, do a spatial filter
     if selected_zip is not None:
@@ -80,7 +80,7 @@ def map_add_schools(m, selected_zip=None):
             polygon_geom = polygon.iloc[0]  
             gdf_edu = gdf_edu[gdf_edu.within(polygon_geom)]
 
-    gdf_edu['href'] = '<a href="' + gdf_edu.Website + '">' + gdf_edu.Website + "</a>"
+    gdf_edu['Link'] = '<a href="' + gdf_edu.Website + '">' + gdf_edu.Website + "</a>"
 
     school_type = gdf_edu["School_Type"].unique()
     big_schools = ("Neighborhood","Charter","Citywide-Option")
@@ -100,7 +100,7 @@ def map_add_schools(m, selected_zip=None):
         name="schools",
         marker=folium.Circle(radius=4, fill_color="orange", fill_opacity=0.4, color="black", weight=1),
         tooltip=folium.GeoJsonTooltip(fields=['School_ID', 'Long_Name',"School_Type"]), # show these labels
-        popup=folium.GeoJsonPopup(fields=['School_ID', 'Long_Name', "href"]), # show these labels when click on
+        popup=folium.GeoJsonPopup(fields=['School_ID', 'Long_Name', "Link"]), # show these labels when click on
         style_function=lambda x: {
             "fillColor": color_index.get(x['properties']['Creative_School_Certification'],2),
             "radius":  radius_index.get(x['properties']['School_Type']), # set fillcolor and radius based on certification and school type
