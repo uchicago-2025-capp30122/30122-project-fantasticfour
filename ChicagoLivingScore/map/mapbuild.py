@@ -5,16 +5,15 @@ import pandas as pd
 import httpx
 from shapely import wkt
 import lxml.html
+import pathlib
+from shapely.geometry import Point
 
 
 BASE_DIR = pathlib.Path(__file__).parent
 
-def cssscraper(key):
+def cssscraper(root, key):
     rows = root.cssselect(key)
-    rv_lst = []
-    for row in rows:
-        rv_lst.append(row.text)
-    return rv_lst
+    return [row.text for row in rows]
 
 def get_chicago_zip_geo():
     # Download Chicago zipcode data as XML
