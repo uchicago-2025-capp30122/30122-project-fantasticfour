@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 # Load local metrics data
 BASE_DIR = pathlib.Path(__file__).parent
-DATA_FILE = BASE_DIR / ".." / "data" / "cleaned_data" / "Housing_Data_Final.csv"
+DATA_FILE = BASE_DIR / ".." / "data" / "cleaned_data" / "cleaned_data_housing.csv"
 df_metrics = pd.read_csv(DATA_FILE)
 
 
@@ -74,21 +74,30 @@ def create_map(selected_zip=None):
         geo.add_to(m)
     return m
 
-def map_add_schools(m):
-    DATA_FILE = BASE_DIR / ".." / "data" / "raw_data" / "edcation.csv"
+def map_add_schools(m, selected_zip=None):
+    DATA_FILE = BASE_DIR / ".." / "data" / "raw_data" / "education.csv"
     
     original_df = gpd.read_file(DATA_FILE)
     original_df["geometry"] = original_df.apply(lambda row: Point(row['School_Longitude'], row['School_Latitude']), axis=1)
     gdf_edu = gpd.GeoDataFrame(original_df[['School_ID', 'Short_Name', 'Long_Name', 'School_Type','School_Latitude','School_Longitude','Website',"Creative_School_Certification","geometry"]]) # use variables we need
+    
+    # If we have a selected_zip, do a spatial filter
+    if selected_zip is not None:
+        gdf_zip = get_chicago_zip_geo()
+        polygon = gdf_zip.loc[gdf_zip['zip'] == selected_zip, 'geometry']
+        if not polygon.empty:
+            polygon_geom = polygon.iloc[0]  
+            gdf_edu = gdf_edu[gdf_edu.within(polygon_geom)]
+
     gdf_edu['href'] = '<a href="' + gdf_edu.Website + '">' + gdf_edu.Website + "</a>"
 
     school_type = gdf_edu["School_Type"].unique()
     big_schools = ("Neighborhood","Charter","Citywide-Option")
     radius_index = {school:80 if school in big_schools else 60 for school in school_type} # generally bigger school has bigger radius
 
-    school_rate = gdf_edu['Creative_School_Certification'].unique()
+    school_rate = list(gdf_edu['Creative_School_Certification'].unique())
     colors = ['green','blue','yellow','grey','brown','white']
-    color_index = {school_rate[i]: colors[i] for i in range(len(colors))} 
+    color_index = {rate: colors[i] if i < len(colors) else "blue" for i, rate in enumerate(school_rate)}
     # better schools will have blue and green, worse schools will have yellowand brown,
     # no data or incomplete will have white or grey
 
@@ -140,15 +149,14 @@ def service():
     zip_data = None
 
     if request.method == "POST":
-        zipcode = request.form.get("zipcode")
-        # Generate map with the selected ZIP highlighted
-        m = create_map(selected_zip=zipcode)
-        map_html = m._repr_html_()
+        user_input = request.form.get("zipcode").strip()
 
         # Example: 从 local metrics 中查询
-        if zipcode.isdigit():
-            row = df_metrics.loc[df_metrics["zipcode"] == int(zipcode)]
+        if user_input.isdigit():
+            zipcode = user_input
+            m = create_map(selected_zip=zipcode)
             # Extract related scores corresponding to the zip code
+            row = df_metrics.loc[df_metrics["zipcode"] == int(zipcode)]
             if not row.empty:
                 zip_data = {
                     "zipcode": zipcode,
@@ -165,17 +173,37 @@ def service():
                     "housing_score": "N/A",
                     "overall_score": "N/A",
                 }
-        else:
-            # If not zip code
+            # For GET requests, display the default map
+            m = map_add_schools(m, selected_zip=zipcode)
+            map_html = m._repr_html_()
+
+        
+        elif user_input.lower() == "education":
+            m = create_map()  
+            m = map_add_schools(m)  
+            map_html = m._repr_html_()
+
             zip_data = {
-                "zipcode": zipcode,
+                "zipcode": "N/A",
                 "education_score": "N/A",
                 "crime_score": "N/A",
                 "housing_score": "N/A",
                 "overall_score": "N/A",
             }
+
+        else:
+            m = create_map()
+            map_html = m._repr_html_()
+            zip_data = {
+                "zipcode": user_input,
+                "education_score": "N/A",
+                "crime_score": "N/A",
+                "housing_score": "N/A",
+                "overall_score": "N/A",
+            }
+
     else:
-        # For GET requests, display the default map
+        # GET post, display the deafult map
         m = create_map()
         map_html = m._repr_html_()
 
