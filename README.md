@@ -36,7 +36,8 @@ ChicagoLivingScore/
 │   │   └── Housing_Data_Final.csv
 │   └── raw_data/
 │       └── Housing_Data.csv
-├── map/ 
+├── map/
+├   ├── buildmap.py
 ├── scraper/
 │   ├── scraper_data/
 │   │   └── zillow.py
@@ -141,8 +142,8 @@ $ uv run python zillow_data_analysis.py
 
 **3) How to initiate the website**
 ```bash
-$ cd ChicagoLivingScore/website
-$ uv run python app.py
+$ cd ChicagoLivingScore
+$ uv run python -m website.app
 ```
 **The Website is composted of 4 Parts, please use the navigation bar to see the deatils**
 

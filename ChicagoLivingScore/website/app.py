@@ -3,75 +3,22 @@ import folium
 import geopandas as gpd
 import pandas as pd
 from shapely import wkt
+from shapely.geometry import Point
 import httpx
 import lxml.html
 import pathlib
 import webbrowser
 from threading import Timer
 import os
+from map.mapbuild import get_chicago_zip_geo, create_map, map_add_schools
 
 
 app = Flask(__name__)
 
 # Load local metrics data
 BASE_DIR = pathlib.Path(__file__).parent
-DATA_FILE = BASE_DIR / ".." / "data" / "cleaned_data" / "Housing_Data_Final.csv"
+DATA_FILE = BASE_DIR / ".." / "data" / "cleaned_data" / "cleaned_data_housing.csv"
 df_metrics = pd.read_csv(DATA_FILE)
-
-
-def cssscraper(root, key):
-    rows = root.cssselect(key)
-    return [row.text for row in rows]
-
-def get_chicago_zip_geo():
-    # Download Chicago zipcode data as XML
-    url = "https://data.cityofchicago.org/api/views/unjd-c2ca/rows.xml?accessType=DOWNLOAD"
-    resp = httpx.get(url)
-    html_text = resp.text
-    root = lxml.html.fromstring(html_text)
-    
-    polygon_lst = cssscraper(root, "the_geom")
-    zip_lst = cssscraper(root, "zip")
-    objectid_lst = cssscraper(root, "objectid")
-    
-    data = []
-    for i in range(0, len(polygon_lst)):
-        data.append([polygon_lst[i], zip_lst[i], objectid_lst[i]])
-    df = pd.DataFrame(data, columns=['geometry','zip','objectid'])
-    df['geometry'] = df['geometry'].apply(wkt.loads)
-    gdf = gpd.GeoDataFrame(df, geometry='geometry')
-    return gdf
-
-
-def create_map(selected_zip=None):
-    """
-    Generate a Folium map centered on Chicago. If 'selected_zip' is provided,
-    that region will be highlighted with a darker color.
-    """
-    m = folium.Map(location=[41.8781, -87.6298], zoom_start=11, tiles='cartodbpositron')
-    gdf = get_chicago_zip_geo()
-    
-    for _, row in gdf.iterrows():
-        # If this zipcode is selected, use dark color fill; otherwise use light blue fill.
-        if selected_zip and row['zip'] == selected_zip:
-            fill_color = "#2196F3"  
-        else:
-            fill_color = "#BBDEFB"
-        sim_geo = gdf.loc[[_]]["geometry"].simplify(tolerance=0.00001)
-        geo_json = sim_geo.to_json()
-
-        geo = folium.GeoJson(
-            data=geo_json,
-            style_function=lambda feature, fill_color=fill_color: {
-                'fillColor': fill_color,
-                'color': "#0D47A1",  
-                'weight': 2,
-                'fillOpacity': 0.6,
-            }
-        )
-        folium.Popup(row["zip"]).add_to(geo)
-        geo.add_to(m)
-    return m
 
 
 # Construct the main page (About page)
@@ -101,15 +48,14 @@ def service():
     zip_data = None
 
     if request.method == "POST":
-        zipcode = request.form.get("zipcode")
-        # Generate map with the selected ZIP highlighted
-        m = create_map(selected_zip=zipcode)
-        map_html = m._repr_html_()
+        user_input = request.form.get("zipcode").strip()
 
         # Example: 从 local metrics 中查询
-        if zipcode.isdigit():
-            row = df_metrics.loc[df_metrics["zipcode"] == int(zipcode)]
+        if user_input.isdigit():
+            zipcode = user_input
+            m = create_map(selected_zip=zipcode)
             # Extract related scores corresponding to the zip code
+            row = df_metrics.loc[df_metrics["zipcode"] == int(zipcode)]
             if not row.empty:
                 zip_data = {
                     "zipcode": zipcode,
@@ -126,17 +72,37 @@ def service():
                     "housing_score": "N/A",
                     "overall_score": "N/A",
                 }
-        else:
-            # If not zip code
+            # For GET requests, display the default map
+            m = map_add_schools(m, selected_zip=zipcode)
+            map_html = m._repr_html_()
+
+        
+        elif user_input.lower() == "education":
+            m = create_map()  
+            m = map_add_schools(m)  
+            map_html = m._repr_html_()
+
             zip_data = {
-                "zipcode": zipcode,
+                "zipcode": "N/A",
                 "education_score": "N/A",
                 "crime_score": "N/A",
                 "housing_score": "N/A",
                 "overall_score": "N/A",
             }
+
+        else:
+            m = create_map()
+            map_html = m._repr_html_()
+            zip_data = {
+                "zipcode": user_input,
+                "education_score": "N/A",
+                "crime_score": "N/A",
+                "housing_score": "N/A",
+                "overall_score": "N/A",
+            }
+
     else:
-        # For GET requests, display the default map
+        # GET post, display the deafult map
         m = create_map()
         map_html = m._repr_html_()
 
