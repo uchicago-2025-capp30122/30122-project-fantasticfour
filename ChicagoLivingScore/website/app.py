@@ -16,9 +16,19 @@ from map.mapbuild import get_chicago_zip_geo, create_map, map_add_schools
 app = Flask(__name__)
 
 # Load local metrics data
-BASE_DIR = pathlib.Path(__file__).parent
-DATA_FILE = BASE_DIR / ".." / "data" / "cleaned_data" / "cleaned_data_housing.csv"
+BASE_DIR = pathlib.Path(__file__).parent.parent  
+DATA_FILE = BASE_DIR / "data" / "cleaned_data" / "final_living_score.csv"
 df_metrics = pd.read_csv(DATA_FILE)
+
+def format_score(val):
+    """
+    Convert a numeric value to a one-decimal-place string.
+    If val is NaN or None, return "N/A".
+    """
+    if pd.isnull(val):
+        return "N/A"
+    else:
+        return f"{val:.1f}"
 
 
 # Construct the main page (About page)
@@ -57,20 +67,33 @@ def service():
             # Extract related scores corresponding to the zip code
             row = df_metrics.loc[df_metrics["zipcode"] == int(zipcode)]
             if not row.empty:
+                df_row = row.iloc[0]
                 zip_data = {
                     "zipcode": zipcode,
-                    "education_score": row.iloc[0].get("education_score", "N/A"),
-                    "crime_score": row.iloc[0].get("crime_score", "N/A"),
-                    "housing_score": row.iloc[0].get("housing_score", "N/A"),
-                    "overall_score": row.iloc[0].get("overall_score", "N/A"),
+                    "housing_score": format_score(df_row.get("housing_score")),
+                    "unemployed_score": format_score(df_row.get("unemployed_score")),
+                    "commute_time_score": format_score(df_row.get("commute_time_score")),
+                    "avg_income_score": format_score(df_row.get("avg_income_score")),
+                    "private_insurance_score": format_score(df_row.get("private_insurance_score")),
+                    "education_score": format_score(df_row.get("education_score")),
+                    "crime_score": format_score(df_row.get("crime_score")),
+                    "environment_score": format_score(df_row.get("environment_score")),
+                    "econ_score": format_score(df_row.get("econ_score")),
+                    "final_score": format_score(df_row.get("final_score"))
                 }
             else:
                 zip_data = {
                     "zipcode": zipcode,
+                    "housing_score": "N/A",
+                    "unemployed_score": "N/A",
+                    "commute_time_score": "N/A",
+                    "avg_income_score": "N/A",
+                    "private_insurance_score": "N/A",
                     "education_score": "N/A",
                     "crime_score": "N/A",
-                    "housing_score": "N/A",
-                    "overall_score": "N/A",
+                    "environment_score": "N/A",
+                    "econ_score": "N/A",
+                    "final_score": "N/A"
                 }
             # For GET requests, display the default map
             m = map_add_schools(m, selected_zip=zipcode)
@@ -82,29 +105,30 @@ def service():
             m = map_add_schools(m)  
             map_html = m._repr_html_()
 
-            zip_data = {
-                "zipcode": "N/A",
-                "education_score": "N/A",
-                "crime_score": "N/A",
-                "housing_score": "N/A",
-                "overall_score": "N/A",
-            }
-
         else:
+            # For other inputs, just show the default map with placeholder data
             m = create_map()
             map_html = m._repr_html_()
             zip_data = {
                 "zipcode": user_input,
+                "housing_score": "N/A",
+                "unemployed_score": "N/A",
+                "commute_time_score": "N/A",
+                "avg_income_score": "N/A",
+                "private_insurance_score": "N/A",
                 "education_score": "N/A",
                 "crime_score": "N/A",
-                "housing_score": "N/A",
-                "overall_score": "N/A",
+                "environment_score": "N/A",
+                "econ_score": "N/A",
+                "final_score": "N/A"
             }
 
     else:
         # GET post, display the deafult map
         m = create_map()
         map_html = m._repr_html_()
+
+    
 
     return render_template("service.html", map_html=map_html, zip_data=zip_data)
 
@@ -141,23 +165,6 @@ def github():
     """
     return render_template("github.html")
 
-
-
-# Test data for placeholder
-@app.route("/api/zip/<zipcode>")
-def get_zip_data(zipcode):
-    """
-    Placeholder endpoint: returns self-written JSON data for a given zip code.
-    This will be replaced with a real database metrics
-    """
-    data = {
-        "zipcode": zipcode,
-        "education_score": 0.8,
-        "crime_score": 0.3,
-        "housing_score": 0.7,
-        "overall_score": 0.75
-    }
-    return jsonify(data)
 
 
 def open_browser():
