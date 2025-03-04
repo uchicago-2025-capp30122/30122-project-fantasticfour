@@ -7,7 +7,7 @@ class FinalScoreCalculator:
         
         # Input file path
         self.housing_file = self.base_dir / "data" / "cleaned_data" / "cleaned_data_housing.csv"
-        self.econ_file = self.base_dir / "data" / "cleaned_data" / "cleaned_data_econ_infrastructure.csv"
+        self.econ_file = self.base_dir / "data" / "cleaned_data" / "cleaned_data_economic_infrastructure.csv"
         self.education_file = self.base_dir / "data" / "cleaned_data" / "cleaned_data_education.csv"
         self.crime_file = self.base_dir / "data" / "cleaned_data" / "cleaned_data_crime.csv"
         self.environment_file = self.base_dir / "data" / "cleaned_data" / "cleaned_data_environment.csv"
@@ -48,14 +48,14 @@ class FinalScoreCalculator:
             columns={'norm_avg_price_per_sqft': 'housing_score'}
         )
         # Econ and infra metrics
-        df_econ = df_econ[['zipcode', 'Unemployed', 'Mean travel time to work (minutes)', 
-                           'Mean household income (dollars)', 'Employed and With private health insurance']]
+        df_econ = df_econ[['zipcode', 'unemployed', 'mean travel time to work (minutes)', 
+                           'mean household income (dollars)', 'employed with health insurance coverage']]
         # Rename for clarification
         df_econ = df_econ.rename(columns={
-            'Unemployed': 'unemployed_score',
-            'Mean travel time to work (minutes)': 'commute_time_score',
-            'Mean household income (dollars)': 'avg_income_score',
-            'Employed and With private health insurance': 'private_insurance_score'
+            'unemployed': 'unemployed_score',
+            'mean travel time to work (minutes)': 'commute_time_score',
+            'mean household income (dollars)': 'avg_income_score',
+            'employed with health insurance coverage': 'private_insurance_score'
         })
         
         # Education data metrics
@@ -83,14 +83,14 @@ class FinalScoreCalculator:
         df_merge.fillna(0, inplace=True)
         
         # Calculate the economic part score
-        df_merge["econ_score"] = (0.12 * df_merge["unemployed_score"] +
+        df_merge["econ_score"] = (- 0.12 * df_merge["unemployed_score"] +
                                   0.10 * df_merge["commute_time_score"] +
                                   0.10 * df_merge["avg_income_score"] +
                                   0.04 * df_merge["private_insurance_score"])
         
         # Compute the final living score using the given weights:
         # housing: 21%, econ_score: 36%, education: 14%, crime: 17%, environment: 12%
-        df_merge["final_score"] = (0.21 * df_merge["housing_score"] +
+        df_merge["final_score"] = (-0.21 * df_merge["housing_score"] +
                                    0.36 * df_merge["econ_score"] +
                                    0.14 * df_merge["education_score"] +
                                    0.17 * df_merge["crime_score"] +
