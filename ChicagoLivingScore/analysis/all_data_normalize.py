@@ -8,6 +8,7 @@ class DataNormalizer:
         self.base_dir = pathlib.Path(__file__).parent.parent
         self.env_file = self.base_dir / "data" / "cleaned_data" / "cleaned_data_environment.csv"
         self.crime_file = self.base_dir / "data" / "cleaned_data" / "cleaned_data_crime.csv"
+        self.econ_file = self.base_dir / "data" / "cleaned_data" / "cleaned_data_economic_infrastructure.csv"
     
     def min_max_normalize(self, series, invert=False):
         min_val = series.min()
@@ -36,6 +37,14 @@ class DataNormalizer:
         print(f"Crime data processed and saved")
         return df_crime
 
+    def process_econmic(self)
+
+        df_econ = pd.read_csv(self.econ_file)
+        df_econ["mean travel time to work (minutes)"] = self.min_max_normalize(df_econ["mean travel time to work (minutes)"], invert=True)
+        output_path = self.base_dir / "data" / "cleaned_data" / "cleaned_data_economic_infrastructure.csv"
+        df_econ.to_csv(output_path, index=False)
+        print(f"Economics data processed and saved")
+        return df_econ
 
 if __name__ == "__main__":
     normalizer = DataNormalizer()
