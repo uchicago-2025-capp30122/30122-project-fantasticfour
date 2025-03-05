@@ -1,7 +1,5 @@
-import pathlib
+from pathlib import Path
 import pandas as pd
-
-
 
 
 def load_data_clean(file_path):
@@ -14,7 +12,7 @@ def load_data_clean(file_path):
     # cleaning our data
     df.columns = df.columns.str.lower().str.strip()
     df.rename(columns={"label": "zipcode"}, inplace=True) #rename the column 'label' to 'zipcode'
-    df["zipcode"] = df["zipcode"].str.extract(r'(\d{5})').astype(float) 
+    df["zipcode"] = df["zipcode"].str.extract(r'(\d{5})').dropna().astype(float)
     
     return df
 
@@ -50,12 +48,9 @@ def normalize_data(file_path):
     60660, 60661, 60666, 60707, 60827
     ]
 
-
-    chicago_zipcodes = [float(zipcode) for zipcode in chicago_zipcodes]
-
+   
     # only keep chicago zip codes
     df = df[df['zipcode'].isin(chicago_zipcodes)]
-
 
     for column in df.columns[1:]:  # skip zipcode column 
         df[column] = df[column].astype(str).str.replace(',', '').astype(float)  #convert values to floats also as there were commas in our values, we had to take them out
@@ -72,11 +67,11 @@ def normalize_data(file_path):
     print(("Processed data saved"))
 
 def main(file_path):
-    df = load_data_clean(file_path)
-    processed_data = normalize_data(df)
+    processed_data = normalize_data(file_path)
     return processed_data
 
-file_path = "/Users/macbookair/Desktop/Capp 2024/2nd quater/capp/raw_data_eco_infra.csv"
+
+file_path = Path("./data / raw_data / raw_data_eco_infra.csv")
 zip_results = main(file_path)
 # Save Results
 print("Processing Complete. Results saved to 'cleaned_data_economic_infrastructure.csv'")
