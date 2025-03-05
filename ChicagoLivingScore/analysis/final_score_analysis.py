@@ -51,9 +51,9 @@ class FinalScoreCalculator:
         """    
         final_score = 
                     0.17 * Unemployed 
-                    + 0.15 * Mean travel time to work (minutes) 
-                    + 0.15 * Mean household income (dollars) 
-                    + 0.09 * Employed and With private health insurance 
+                    + 0.17 * Mean travel time to work (minutes) 
+                    + 0.19 * Mean household income (dollars) 
+                    + 0.03 * Employed and With private health insurance 
                     + 0.15 * education 
                     + 0.17 * crime 
                     + 0.12 * environment
@@ -117,10 +117,10 @@ class FinalScoreCalculator:
         # Compute the final living score using the given weights:
         # housing: 21%, econ_score: 36%, education: 14%, crime: 17%, environment: 12%
         df_merge["final_score"] = (0.17 * df_merge["unemployed_score"] +
-                                   0.15 * df_merge["commute_time_score"] +
-                                   0.15 * df_merge["avg_income_score"] +
-                                   0.15 * df_merge["private_insurance_score"] +
-                                   0.14 * df_merge["education_score"] +
+                                   0.17 * df_merge["commute_time_score"] +
+                                   0.19 * df_merge["avg_income_score"] +
+                                   0.03 * df_merge["private_insurance_score"] +
+                                   0.15 * df_merge["education_score"] +
                                    0.17 * df_merge["crime_score"] +
                                    0.12 * df_merge["environment_score"]).round(2)
         
