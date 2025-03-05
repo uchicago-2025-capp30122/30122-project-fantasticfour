@@ -6,6 +6,7 @@ class FinalScoreCalculator:
         self.base_dir = pathlib.Path(__file__).parent.parent
         
         # Input file path
+        self.zip_list_file = self.base_dir / "data" / "cleaned_data" / "chicago_zip.csv"
         self.housing_file = self.base_dir / "data" / "cleaned_data" / "cleaned_data_housing.csv"
         self.econ_file = self.base_dir / "data" / "cleaned_data" / "cleaned_data_economic_infrastructure.csv"
         self.education_file = self.base_dir / "data" / "cleaned_data" / "cleaned_data_education.csv"
@@ -23,6 +24,28 @@ class FinalScoreCalculator:
         df = pd.read_csv(file_path)
         df[zip_col] = df[zip_col].apply(self.normalize_zip)
         return df
+    
+
+    def impute_by_nearest(self, df, col):
+        df = df.copy()
+        df['zip_int'] = df['zipcode'].astype(int)
+        
+        missing_idx = df[df[col].isnull()].index
+        
+        for idx in missing_idx:
+            current_zip = df.loc[idx, 'zip_int']
+            valid = df[df[col].notnull()]
+            if valid.empty:
+                continue  
+            valid = valid.assign(distance=(valid['zip_int'] - current_zip).abs())
+            nearest = valid.nsmallest(4, 'distance')
+
+            mean_val = nearest[col].mean()
+            df.loc[idx, col] = mean_val
+        
+       
+        df.drop(columns=['zip_int'], inplace=True)
+        return df
 
     def merge_data(self):
         """    
@@ -35,6 +58,10 @@ class FinalScoreCalculator:
                     + 0.17 * crime 
                     + 0.12 * environment
         """
+
+        df_zip = self.read_and_normalize(self.zip_list_file)
+        df_zip = df_zip[['zipcode']]
+
         # Read and normalize each CSV file
         df_housing = self.read_and_normalize(self.housing_file)
         df_econ = self.read_and_normalize(self.econ_file)
@@ -74,24 +101,25 @@ class FinalScoreCalculator:
         )
         
         # Merge all data on zipcode 
-        df_merge = df_housing.merge(df_econ, on="zipcode", how="outer") \
-                             .merge(df_edu, on="zipcode", how="outer") \
-                             .merge(df_crime, on="zipcode", how="outer") \
-                             .merge(df_env, on="zipcode", how="outer")
+        df_merge = df_zip.merge(df_housing, on="zipcode", how="left") \
+                             .merge(df_econ, on="zipcode", how="left") \
+                             .merge(df_edu, on="zipcode", how="left") \
+                             .merge(df_crime, on="zipcode", how="left") \
+                             .merge(df_env, on="zipcode", how="left")
         
-        # Fill any missing values with 0
-        df_merge.fillna(0, inplace=True)
-        
-        # Calculate the economic part score
-        df_merge["econ_score"] = (- 0.12 * df_merge["unemployed_score"] +
-                                  0.10 * df_merge["commute_time_score"] +
-                                  0.10 * df_merge["avg_income_score"] +
-                                  0.04 * df_merge["private_insurance_score"])
+        cols_to_impute = ['avg_price_per_sqft', 'unemployed_score', 'commute_time_score', 
+                          'avg_income_score', 'private_insurance_score', 'education_score', 
+                          'crime_score', 'environment_score']
+        for col in cols_to_impute:
+            df_merge = self.impute_by_nearest(df_merge, col)
+    
         
         # Compute the final living score using the given weights:
         # housing: 21%, econ_score: 36%, education: 14%, crime: 17%, environment: 12%
-        df_merge["final_score"] = (-0.21 * df_merge["housing_score"] +
-                                   0.36 * df_merge["econ_score"] +
+        df_merge["final_score"] = (0.17 * df_merge["unemployed_score"] +
+                                   0.15 * df_merge["commute_time_score"] +
+                                   0.15 * df_merge["avg_income_score"] +
+                                   0.15 * df_merge["private_insurance_score"] +
                                    0.14 * df_merge["education_score"] +
                                    0.17 * df_merge["crime_score"] +
                                    0.12 * df_merge["environment_score"]).round(2)
