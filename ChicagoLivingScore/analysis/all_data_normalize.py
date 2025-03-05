@@ -50,3 +50,4 @@ if __name__ == "__main__":
     normalizer = DataNormalizer()
     normalizer.process_environment()
     normalizer.process_crime()
+    normalizer.process_econmic()
