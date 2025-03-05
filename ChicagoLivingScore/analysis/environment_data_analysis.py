@@ -1,4 +1,3 @@
-
 from typing import NamedTuple
 from shapely.geometry import Point, shape
 from shapely import wkt

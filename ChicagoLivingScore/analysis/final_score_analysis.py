@@ -26,12 +26,12 @@ class FinalScoreCalculator:
 
     def merge_data(self):
         """    
-        final_score = 0.21 * housing 
-                    + 0.12 * Unemployed 
-                    + 0.10 * Mean travel time to work (minutes) 
-                    + 0.10 * Mean household income (dollars) 
-                    + 0.04 * Employed and With private health insurance 
-                    + 0.14 * education 
+        final_score = 
+                    0.17 * Unemployed 
+                    + 0.15 * Mean travel time to work (minutes) 
+                    + 0.15 * Mean household income (dollars) 
+                    + 0.09 * Employed and With private health insurance 
+                    + 0.15 * education 
                     + 0.17 * crime 
                     + 0.12 * environment
         """
@@ -44,8 +44,8 @@ class FinalScoreCalculator:
         
 
         # Housing data metrics
-        df_housing = df_housing[['zipcode', 'norm_avg_price_per_sqft']].rename(
-            columns={'norm_avg_price_per_sqft': 'housing_score'}
+        df_housing = df_housing[['zipcode', 'avg_price_per_sqft']].rename(
+            columns={'avg_price_per_sqft': 'avg_price_per_sqft'}
         )
         # Econ and infra metrics
         df_econ = df_econ[['zipcode', 'unemployed', 'mean travel time to work (minutes)', 
