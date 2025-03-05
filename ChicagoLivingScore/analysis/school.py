@@ -88,8 +88,51 @@ def main(file_path):
     zip_results = compute_zip_level_metrics(df)
     return zip_results
 
-file_path = "milestones/milestone3/data_preprocess/Schools/Chicago_Public_Schools_2024.csv"
+file_path = "./data/raw_data/Chicago_Public_Schools_2024.csv"
 zip_results = main(file_path)
-# Save Results
-zip_results.to_csv("zip_code_education_results.csv")
-print("Processing Complete. Results saved to 'zip_code_education_results.csv'")
+zip_results.reset_index(inplace=True)
+zip_results.rename(columns={"index": "zip_code"}, inplace=True)
+zip_results.to_csv("./data/cleaned_data/cleaned_data_education.csv", index=False)
+all_zip_codes = pd.read_csv("./data/cleaned_data/chicago_zip.csv")
+info_zip_codes = pd.read_csv("./data/cleaned_data/cleaned_data_education.csv")
+zip_col = "zip_code"
+all_zip_codes[zip_col] = all_zip_codes[zip_col].astype(int)
+info_zip_codes[zip_col] = info_zip_codes[zip_col].astype(int)
+
+all_zip_codes = all_zip_codes.sort_values(by=zip_col).reset_index(drop=True)
+zip_info_dict = info_zip_codes.set_index(zip_col).to_dict(orient="index")
+
+def find_nearest_values(zip_code):
+    step = 1
+    found_values = {col: None for col in info_zip_codes.columns if col != zip_col}
+
+    while step < len(all_zip_codes):
+        lower_zip = zip_code - step
+        upper_zip = zip_code + step
+
+        if lower_zip in zip_info_dict:
+            for col in found_values.keys():
+                if found_values[col] is None:
+                    found_values[col] = zip_info_dict[lower_zip][col]
+
+        if upper_zip in zip_info_dict:
+            for col in found_values.keys():
+                if found_values[col] is None:
+                    found_values[col] = zip_info_dict[upper_zip][col]
+
+        if all(value is not None for value in found_values.values()):
+            break
+
+        step += 1
+
+    return pd.Series(found_values)
+
+missing_zips = all_zip_codes[~all_zip_codes[zip_col].isin(info_zip_codes[zip_col])]
+missing_values_df = missing_zips[zip_col].apply(find_nearest_values)
+missing_zips = pd.concat([missing_zips, missing_values_df], axis=1)
+final_data = pd.concat([info_zip_codes, missing_zips], ignore_index=True)
+final_data = final_data.sort_values(by=zip_col).reset_index(drop=True)
+
+final_data.to_csv("./data/cleaned_data/cleaned_data_education.csv", index=False)
+
+
