@@ -37,7 +37,7 @@ class DataNormalizer:
         print(f"Crime data processed and saved")
         return df_crime
 
-    def process_econmic(self)
+    def process_econmic(self):
 
         df_econ = pd.read_csv(self.econ_file)
         df_econ["mean travel time to work (minutes)"] = self.min_max_normalize(df_econ["mean travel time to work (minutes)"], invert=True)
