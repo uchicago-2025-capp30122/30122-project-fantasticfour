@@ -1,5 +1,9 @@
 import pandas as pd
 import numpy as np
+import pathlib
+import geopandas as gpd
+
+
 
 def load_data(file_path):
     df = pd.read_csv(file_path)
@@ -136,3 +140,11 @@ final_data = final_data.sort_values(by=zip_col).reset_index(drop=True)
 final_data.to_csv("./data/cleaned_data/cleaned_data_education.csv", index=False)
 
 
+# generate a education csv file that has locations of schools 
+BASE_DIR = pathlib.Path(__file__).parent.parent
+INPUT_FILE = BASE_DIR / "data" / "raw_data" / "education.csv"
+OUTPUT_FILE = BASE_DIR / "data" / "cleaned_data"/"cleaned_education.csv"
+
+original_df = gpd.read_file(INPUT_FILE)
+gdf_edu = gpd.GeoDataFrame(original_df[['School_ID', 'Short_Name', 'Long_Name', 'School_Type','School_Latitude','School_Longitude','Website',"Creative_School_Certification"]]) # use variables we need
+gdf_edu.to_csv(OUTPUT_FILE, index=False, encoding="utf-8")
