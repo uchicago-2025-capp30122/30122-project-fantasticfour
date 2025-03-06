@@ -31,6 +31,15 @@ def get_chicago_zip_geo():
         data.append([polygon_lst[i], zip_lst[i], objectid_lst[i]])
     df = pd.DataFrame(data, columns=['geometry','zip','objectid'])
     df['geometry'] = df['geometry'].apply(wkt.loads)
+    
+    def unify_zip(z):
+        try:
+            return str(int(float(z)))
+        except:
+            return None
+    
+    df['zip'] = df['zip'].apply(unify_zip)
+    
     gdf = gpd.GeoDataFrame(df, geometry='geometry')
     return gdf
 
@@ -123,7 +132,7 @@ def map_show_avg_price(m,df_metrics): # df_metrics is the final_score_analysis t
         data=df_use,
         columns=["zipcode","avg_price_per_sqft"],
         key_on="feature.properties.zip",
-        fill_color="YlOrRd",
+        fill_color="YlGn",
         bins=[100,200,300,400,500],
         name="average house price",
         highlight=True,
@@ -145,7 +154,7 @@ def show_unemployed_score(m,df_metrics): # df_metrics is the final_score_analysi
         data=df_use,
         columns=["zipcode","unemployed_score"],
         key_on="feature.properties.zip",
-        fill_color="YlOrBr",
+        fill_color="YlGn",
         bins=[0,0.2,0.4,0.6,0.8,1.0],
         name="employment rate",
         highlight=True,
