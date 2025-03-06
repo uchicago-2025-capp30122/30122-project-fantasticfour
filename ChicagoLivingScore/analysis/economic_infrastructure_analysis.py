@@ -60,9 +60,10 @@ def normalize_data(file_path):
 
     # for better readability, we have rounded off our values
     df_normalized = df_normalized.round(2)
-
+    
     # export csv
-    df_normalized.to_csv("cleaned_data_economic_infrastructure.csv", index=False)
+    output_path = Path("./data/cleaned_data/cleaned_data_economic_infrastructure.csv")
+    df_normalized.to_csv(output_path, index=False)
     
     print(("Processed data saved"))
 
@@ -74,6 +75,6 @@ def main(file_path):
 file_path = Path("../data/raw_data/raw_data_eco_infra.csv")
 zip_results = main(file_path)
 # Save Results
-print("Processing Complete. Results saved to 'cleaned_data_economic_infrastructure.csv'")
+print(f"Processing Complete. Results saved to {output_path}")
 
 
