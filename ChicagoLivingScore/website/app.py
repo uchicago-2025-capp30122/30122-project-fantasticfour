@@ -10,7 +10,7 @@ import pathlib
 import webbrowser
 from threading import Timer
 import os
-from map.mapbuild import get_chicago_zip_geo, create_map, map_add_schools
+from map.mapbuild import get_chicago_zip_geo, create_map, map_add_schools, map_show_avg_price, show_unemployed_score, show_trafic_score, show_education_score, show_crime_score, show_environment_score, show_final_score
 
 
 app = Flask(__name__)
@@ -20,15 +20,12 @@ BASE_DIR = pathlib.Path(__file__).parent.parent
 DATA_FILE = BASE_DIR / "data" / "cleaned_data" / "final_living_score.csv"
 df_metrics = pd.read_csv(DATA_FILE)
 
+
 def format_score(val):
-    """
-    Convert a numeric value to a one-decimal-place string.
-    If val is NaN or None, return "N/A".
-    """
     if pd.isnull(val):
         return "N/A"
     else:
-        return f"{val:.1f}"
+        return f"{val:.2f}"
 
 
 # Construct the main page (About page)
@@ -58,9 +55,9 @@ def service():
     zip_data = None
 
     if request.method == "POST":
-        user_input = request.form.get("zipcode").strip()
+        user_input = request.form.get("zipcode").strip().lower()
 
-        # Example: 从 local metrics 中查询
+        # If the input is numeric, treat it as a ZIP code
         if user_input.isdigit():
             zipcode = user_input
             m = create_map(selected_zip=zipcode)
@@ -70,7 +67,7 @@ def service():
                 df_row = row.iloc[0]
                 zip_data = {
                     "zipcode": zipcode,
-                    "housing_score": format_score(df_row.get("housing_score")),
+                    "housing_price": format_score(df_row.get("avg_price_per_sqft")),
                     "unemployed_score": format_score(df_row.get("unemployed_score")),
                     "commute_time_score": format_score(df_row.get("commute_time_score")),
                     "avg_income_score": format_score(df_row.get("avg_income_score")),
@@ -78,13 +75,12 @@ def service():
                     "education_score": format_score(df_row.get("education_score")),
                     "crime_score": format_score(df_row.get("crime_score")),
                     "environment_score": format_score(df_row.get("environment_score")),
-                    "econ_score": format_score(df_row.get("econ_score")),
                     "final_score": format_score(df_row.get("final_score"))
                 }
             else:
                 zip_data = {
                     "zipcode": zipcode,
-                    "housing_score": "N/A",
+                    "housing_price": "N/A",
                     "unemployed_score": "N/A",
                     "commute_time_score": "N/A",
                     "avg_income_score": "N/A",
@@ -92,17 +88,47 @@ def service():
                     "education_score": "N/A",
                     "crime_score": "N/A",
                     "environment_score": "N/A",
-                    "econ_score": "N/A",
                     "final_score": "N/A"
                 }
             # For GET requests, display the default map
             m = map_add_schools(m, selected_zip=zipcode)
             map_html = m._repr_html_()
 
-        
-        elif user_input.lower() == "education":
-            m = create_map()  
-            m = map_add_schools(m)  
+        # Handle keyword inputs to show specific indicators distribution
+        elif user_input == "education":
+            m = create_map()
+            # Call the show_education_score function from mapbuild.py
+            m = show_education_score(m, df_metrics)
+            map_html = m._repr_html_()
+
+        elif user_input == "crime":
+            m = create_map()
+            m = show_crime_score(m, df_metrics)
+            map_html = m._repr_html_()
+
+        elif user_input == "environment":
+            m = create_map()
+            m = show_environment_score(m, df_metrics)
+            map_html = m._repr_html_()
+
+        elif user_input == "traffic":
+            m = create_map()
+            m = show_trafic_score(m, df_metrics)
+            map_html = m._repr_html_()
+
+        elif user_input == "housing":
+            m = create_map()
+            m = map_show_avg_price(m, df_metrics)
+            map_html = m._repr_html_()
+
+        elif user_input == "unemployment":
+            m = create_map()
+            m = show_unemployed_score(m, df_metrics)
+            map_html = m._repr_html_()
+
+        elif user_input == "final":
+            m = create_map()
+            m = show_final_score(m, df_metrics)
             map_html = m._repr_html_()
 
         else:
@@ -111,7 +137,7 @@ def service():
             map_html = m._repr_html_()
             zip_data = {
                 "zipcode": user_input,
-                "housing_score": "N/A",
+                "housing_price": "N/A",
                 "unemployed_score": "N/A",
                 "commute_time_score": "N/A",
                 "avg_income_score": "N/A",
@@ -119,7 +145,6 @@ def service():
                 "education_score": "N/A",
                 "crime_score": "N/A",
                 "environment_score": "N/A",
-                "econ_score": "N/A",
                 "final_score": "N/A"
             }
 

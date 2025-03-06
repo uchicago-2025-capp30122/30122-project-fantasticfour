@@ -100,7 +100,7 @@ class FinalScoreCalculator:
             columns={'environment_score': 'environment_score'}
         )
         
-        # Merge all data on zipcode 
+        # Merge all datasets on zipcode 
         df_merge = df_zip.merge(df_housing, on="zipcode", how="left") \
                              .merge(df_econ, on="zipcode", how="left") \
                              .merge(df_edu, on="zipcode", how="left") \
@@ -110,12 +110,12 @@ class FinalScoreCalculator:
         cols_to_impute = ['avg_price_per_sqft', 'unemployed_score', 'commute_time_score', 
                           'avg_income_score', 'private_insurance_score', 'education_score', 
                           'crime_score', 'environment_score']
+        
         for col in cols_to_impute:
             df_merge = self.impute_by_nearest(df_merge, col)
     
         
         # Compute the final living score using the given weights:
-        # housing: 21%, econ_score: 36%, education: 14%, crime: 17%, environment: 12%
         df_merge["final_score"] = (0.17 * df_merge["unemployed_score"] +
                                    0.17 * df_merge["commute_time_score"] +
                                    0.19 * df_merge["avg_income_score"] +

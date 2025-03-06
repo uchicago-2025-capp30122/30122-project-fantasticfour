@@ -20,7 +20,9 @@ dependencies = [
   # "scrapfly",
   "numpy",
   "cssselect",
-  "zillow"
+  "zillow",
+  "joblib>=1.4.2",
+  "altair>=5.5.0",
 ]
 
 

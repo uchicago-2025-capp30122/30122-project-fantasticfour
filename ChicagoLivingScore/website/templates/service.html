@@ -6,7 +6,7 @@
     <h5>Enter Zip Code to Search Living Scores</h5>
     <form action="{{ url_for('service') }}" method="POST">  <!-- Form that calls the 'service' route -->
       <div class="form-group">
-        <input type="text" name="zipcode" id="zipcode" class="form-control" placeholder="Example: 60614" required>
+        <input type="text" name="zipcode" id="zipcode" class="form-control" placeholder="Example: 60614 or education" required>
       </div>
       <button type="submit" class="btn btn-success btn-block">Search</button>
     </form>
@@ -17,7 +17,7 @@
       <div class="card-body">
         <h5 class="card-title">Zip Code: {{ zip_data.zipcode }}</h5>
         
-        <p><strong>Housing Score:</strong> {{ zip_data.housing_score }}</p>
+        <p><strong>Housing Price:</strong> {{ zip_data.housing_price }}</p>
         <p><strong>Unemployed Score:</strong> {{ zip_data.unemployed_score }}</p>
         <p><strong>Commute Time Score:</strong> {{ zip_data.commute_time_score }}</p>
         <p><strong>Avg Income Score:</strong> {{ zip_data.avg_income_score }}</p>
@@ -25,7 +25,6 @@
         <p><strong>Education Score:</strong> {{ zip_data.education_score }}</p>
         <p><strong>Crime Score:</strong> {{ zip_data.crime_score }}</p>
         <p><strong>Environment Score:</strong> {{ zip_data.environment_score }}</p>
-        <p><strong>Econ Score:</strong> {{ zip_data.econ_score }}</p>
         
         <hr>
         <p><strong>Final Living Score:</strong> {{ zip_data.final_score }}</p>
