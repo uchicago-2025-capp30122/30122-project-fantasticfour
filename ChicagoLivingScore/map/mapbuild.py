@@ -65,6 +65,53 @@ def create_map(selected_zip=None):
         geo.add_to(m)
     return m
 
+def map_add_crime(m, selected_zip=None):
+    DATA_FILE = BASE_DIR / ".." / "data" / "cleaned_data"/"cleaned_education.csv"
+
+    original_df = gpd.read_file(DATA_FILE)
+    original_df["geometry"] = original_df.apply(lambda row: Point(row['School_Longitude'], row['School_Latitude']), axis=1)
+    gdf_edu = gpd.GeoDataFrame(original_df) # use variables we need
+    
+    # If we have a selected_zip, do a spatial filter
+    if selected_zip is not None:
+        gdf_zip = get_chicago_zip_geo()
+        polygon = gdf_zip.loc[gdf_zip['zip'] == selected_zip, 'geometry']
+        if not polygon.empty:
+            polygon_geom = polygon.iloc[0]  
+            gdf_edu = gdf_edu[gdf_edu.within(polygon_geom)]
+
+    gdf_edu['Link'] = '<a href="' + gdf_edu.Website + '">' + gdf_edu.Website + "</a>"
+
+    school_type = gdf_edu["School_Type"].unique()
+    big_schools = ("Neighborhood","Charter","Citywide-Option")
+    radius_index = {school:80 if school in big_schools else 60 for school in school_type} # generally bigger school has bigger radius
+
+    school_rate = list(gdf_edu['Creative_School_Certification'].unique())
+    colors = ['green','blue','yellow','grey','brown','white']
+    color_index = {rate: colors[i] if i < len(colors) else "blue" for i, rate in enumerate(school_rate)}
+    # better schools will have blue and green, worse schools will have yellowand brown,
+    # no data or incomplete will have white or grey
+
+    gdf_edu.set_crs(epsg=4326, inplace=True) # set the geo information
+
+
+    folium.GeoJson( # add markers on the map
+        gdf_edu,
+        name="schools",
+        marker=folium.Circle(radius=4, fill_color="orange", fill_opacity=0.4, color="black", weight=1),
+        tooltip=folium.GeoJsonTooltip(fields=['School_ID', 'Long_Name',"School_Type"]), # show these labels
+        popup=folium.GeoJsonPopup(fields=['School_ID', 'Long_Name', "Link"]), # show these labels when click on
+        style_function=lambda x: {
+            "fillColor": color_index.get(x['properties']['Creative_School_Certification'],2),
+            "radius":  radius_index.get(x['properties']['School_Type']), # set fillcolor and radius based on certification and school type
+        },
+        highlight_function=lambda x: {"fillOpacity": 0.8},
+        zoom_on_click=True,
+    ).add_to(m)
+
+    return m
+
+
 def map_add_schools(m, selected_zip=None):
     DATA_FILE = BASE_DIR / ".." / "data" / "cleaned_data"/"cleaned_education.csv"
 
@@ -113,13 +160,13 @@ def map_add_schools(m, selected_zip=None):
 
 def map_show_avg_price(m,df_metrics): # df_metrics is the final_score_analysis that we already read in app.py
     
-    df_price = df_metrics[["zipcode","avg_price_per_sqft"]]
-    df_price["zipcode"] = df_price["zipcode"].astype(int)
+    df_use = df_metrics[["zipcode","avg_price_per_sqft"]]
+    df_use["zipcode"] = df_use["zipcode"].astype(int)
     gdf_json = get_chicago_zip_geo().to_json()
 
     folium.Choropleth(
         geo_data=gdf_json,
-        data=df_price,
+        data=df_use,
         columns=["zipcode","avg_price_per_sqft"],
         key_on="feature.properties.zip",
         fill_color="YlOrRd",
@@ -135,20 +182,20 @@ def map_show_avg_price(m,df_metrics): # df_metrics is the final_score_analysis t
 
 def show_unemployed_score(m,df_metrics): # df_metrics is the final_score_analysis that we already read in app.py
     
-    df_price = df_metrics[["zipcode","unemployed_score"]]
-    df_price["zipcode"] = df_price["zipcode"].astype(int)
+    df_use = df_metrics[["zipcode","unemployed_score"]]
+    df_use["zipcode"] = df_use["zipcode"].astype(int)
     gdf_json = get_chicago_zip_geo().to_json()
 
     folium.Choropleth(
         geo_data=gdf_json,
-        data=df_price,
+        data=df_use,
         columns=["zipcode","unemployed_score"],
         key_on="feature.properties.zip",
         fill_color="YlOrBr",
         bins=[0,0.2,0.4,0.6,0.8,1.0],
-        name="unemployed rate",
+        name="employment rate",
         highlight=True,
-        legend_name="unemployed rate",
+        legend_name="employment rate",
         
     ).add_to(m)
     
@@ -157,20 +204,108 @@ def show_unemployed_score(m,df_metrics): # df_metrics is the final_score_analysi
 
 def show_trafic_score(m,df_metrics): # df_metrics is the final_score_analysis that we already read in app.py
     
-    df_traffic = df_metrics[["zipcode","commute_time_score"]]
-    df_traffic["zipcode"] = df_traffic["zipcode"].astype(int)
+    df_use = df_metrics[["zipcode","commute_time_score"]]
+    df_use["zipcode"] = df_use["zipcode"].astype(int)
     gdf_json = get_chicago_zip_geo().to_json()
 
     folium.Choropleth(
         geo_data=gdf_json,
-        data=df_traffic,
+        data=df_use,
         columns=["zipcode","commute_time_score"],
         key_on="feature.properties.zip",
-        fill_color="YlOrBr",
+        fill_color="YlGn",
         bins=[0,0.2,0.4,0.6,0.8,1.0],
         name="commute time score",
         highlight=True,
         legend_name="commute time score",
+        
+    ).add_to(m)
+    
+    return m
+
+
+def show_education_score(m,df_metrics): # df_metrics is the final_score_analysis that we already read in app.py
+    
+    df_use = df_metrics[["zipcode","education_score"]]
+    df_use["zipcode"] = df_use["zipcode"].astype(int)
+    gdf_json = get_chicago_zip_geo().to_json()
+
+    folium.Choropleth(
+        geo_data=gdf_json,
+        data=df_use,
+        columns=["zipcode","education_score"],
+        key_on="feature.properties.zip",
+        fill_color="YlGn",
+        bins=[0,0.2,0.4,0.6,0.8,1.0],
+        name="education score",
+        highlight=True,
+        legend_name="education score",
+        
+    ).add_to(m)
+    
+    return m
+
+
+def show_crime_score(m,df_metrics): # df_metrics is the final_score_analysis that we already read in app.py
+    
+    df_use = df_metrics[["zipcode","crime_score"]]
+    df_use["zipcode"] = df_use["zipcode"].astype(int)
+    gdf_json = get_chicago_zip_geo().to_json()
+
+    folium.Choropleth(
+        geo_data=gdf_json,
+        data=df_use,
+        columns=["zipcode","crime_score"],
+        key_on="feature.properties.zip",
+        fill_color="YlGn",
+        bins=[0,0.2,0.4,0.6,0.8,1.0],
+        name="crime score",
+        highlight=True,
+        legend_name="crime score",
+        
+    ).add_to(m)
+    
+    return m
+
+
+def show_environment_score(m,df_metrics): # df_metrics is the final_score_analysis that we already read in app.py
+    
+    df_use = df_metrics[["zipcode","environment_score"]]
+    df_use["zipcode"] = df_use["zipcode"].astype(int)
+    gdf_json = get_chicago_zip_geo().to_json()
+
+    folium.Choropleth(
+        geo_data=gdf_json,
+        data=df_use,
+        columns=["zipcode","environment_score"],
+        key_on="feature.properties.zip",
+        fill_color="YlGn",
+        bins=[0,0.2,0.4,0.6,0.8,1.0],
+        name="environment score",
+        highlight=True,
+        legend_name="environment score",
+        
+    ).add_to(m)
+    
+    return m
+
+
+def show_final_score(m,df_metrics): # df_metrics is the final_score_analysis that we already read in app.py
+    
+    df_use = df_metrics[["zipcode","final_score"]]
+    df_use["zipcode"] = df_use["zipcode"].astype(int)
+    gdf_json = get_chicago_zip_geo().to_json()
+
+    folium.Choropleth(
+        geo_data=gdf_json,
+        data=df_use,
+        columns=["zipcode","final_score"],
+        key_on="feature.properties.zip",
+        fill_color="YlGn",
+        bins=[0,0.2,0.4,0.6,0.8,1.0],
+        name="final score",
+        highlight=True,
+        legend_name="final score",
         
     ).add_to(m)
     
