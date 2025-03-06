@@ -50,8 +50,8 @@ def info():
     shp_file = pathlib.Path("../data/raw_data/Zips/tl_2020_us_zcta520.shp")
     zips=load_shapefile_with_cache(shp_file)
     find_zip_codes(zips,load_frs_csv())
-    df = pd.read_csv("./data/raw_data/environment_zips.csv")
-    zip_codes_df = pd.read_csv("./data/cleaned_data/chicago_zip.csv")
+    df = pd.read_csv("../data/raw_data/environment_zips.csv")
+    zip_codes_df = pd.read_csv("../data/cleaned_data/chicago_zip.csv")
     zip_column = "ZCTA5CE20"
     zip_codes_list = zip_codes_df["zip_code"].astype(float).tolist()
     df_filtered = df[df[zip_column].astype(float).isin(zip_codes_list)]
