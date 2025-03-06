@@ -41,6 +41,7 @@ class DataNormalizer:
 
         df_econ = pd.read_csv(self.econ_file)
         df_econ["mean travel time to work (minutes)"] = self.min_max_normalize(df_econ["mean travel time to work (minutes)"], invert=True)
+        df_econ["unemployed"] = self.min_max_normalize(df_econ["unemployed"], invert=True)
         output_path = self.base_dir / "data" / "cleaned_data" / "cleaned_data_economic_infrastructure.csv"
         df_econ.to_csv(output_path, index=False)
         print(f"Economics data processed and saved")
