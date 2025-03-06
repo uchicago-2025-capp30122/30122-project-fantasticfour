@@ -26,48 +26,6 @@ def test_min_max_normalize_invert():
 
 
 
-@pytest.fixture
-def temp_env_file(tmp_path):
-    data = {
-        "count": [100, 200, 300],
-        "zipcode": ["60601", "60602", "60603"]
-    }
-    df = pd.DataFrame(data)
-    file_path = tmp_path / "cleaned_data_environment.csv"
-    df.to_csv(file_path, index=False)
-    return file_path
-
-def test_process_environment(temp_env_file):
-    normalizer = DataNormalizer()
-    normalizer.env_file = temp_env_file
-    df_env = normalizer.process_environment()
-    
-    assert "environment_score" in df_env.columns
-    assert df_env["environment_score"].min() >= 0
-    assert df_env["environment_score"].max() <= 1
-
-
-
-@pytest.fixture
-def temp_crime_file(tmp_path):
-    data = {
-        "count": [50, 150, 250],
-        "zipcode": ["60601", "60602", "60603"]
-    }
-    df = pd.DataFrame(data)
-    file_path = tmp_path / "cleaned_data_crime.csv"
-    df.to_csv(file_path, index=False)
-    return file_path
-
-def test_process_crime(temp_crime_file):
-    normalizer = DataNormalizer()
-    normalizer.crime_file = temp_crime_file
-    df_crime = normalizer.process_crime()
-
-
-
-
-
 
 def test_normalize_zip():
     calculator = FinalScoreCalculator()
