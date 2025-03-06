@@ -11,4 +11,4 @@ chicago_zipcodes = [
 
 
 df = pd.DataFrame(chicago_zipcodes, columns=["zip_code"])
-df.to_csv("./data/cleaned_data/chicago_zip.csv", index=False)
+df.to_csv("../data/cleaned_data/chicago_zip.csv", index=False)

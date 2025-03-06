@@ -92,7 +92,7 @@ def main(file_path):
     zip_results = compute_zip_level_metrics(df)
     return zip_results
 
-file_path = "./data/raw_data/Chicago_Public_Schools_2024.csv"
+file_path = "../data/raw_data/Chicago_Public_Schools_2024.csv"
 zip_results = main(file_path)
 zip_results.reset_index(inplace=True)
 zip_results.rename(columns={"index": "zip_code"}, inplace=True)

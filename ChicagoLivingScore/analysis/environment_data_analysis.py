@@ -14,7 +14,7 @@ def load_frs_csv():
     locations , return a list of points objects.
     """
     environmental_incidents = []
-    file_path = pathlib.Path("./data/raw_data/environment.csv")
+    file_path = pathlib.Path("../data/raw_data/environment.csv")
     with file_path.open(mode="r") as file:
         reader = csv.DictReader(file)
         for row in reader:
@@ -43,11 +43,11 @@ def find_zip_codes(gdf_zip, points):
     gdf_points = gpd.GeoDataFrame(df_points, geometry='geometry', crs="EPSG:4326")
     gdf_joined = gpd.sjoin(gdf_points, gdf_zip, how='left', predicate='within')
     df_result=gdf_joined[['lat', 'lon', 'ZCTA5CE20']]
-    df_result.to_csv("./data/raw_data/environment_zips.csv", index=False)
+    df_result.to_csv("../data/raw_data/environment_zips.csv", index=False)
     return gdf_joined[['lat', 'lon', 'ZCTA5CE20']]
 
 def info():
-    shp_file = pathlib.Path("./data/raw_data/Zips/tl_2020_us_zcta520.shp")
+    shp_file = pathlib.Path("../data/raw_data/Zips/tl_2020_us_zcta520.shp")
     zips=load_shapefile_with_cache(shp_file)
     find_zip_codes(zips,load_frs_csv())
     df = pd.read_csv("./data/raw_data/environment_zips.csv")
@@ -57,6 +57,6 @@ def info():
     df_filtered = df[df[zip_column].astype(float).isin(zip_codes_list)]
 
     conteo_por_zip = df_filtered.groupby(zip_column).size().reset_index(name="count")
-    conteo_por_zip.to_csv("./data/cleaned_data/cleaned_data_environment.csv", index=False)
+    conteo_por_zip.to_csv("../data/cleaned_data/cleaned_data_environment.csv", index=False)
     return 
 info()

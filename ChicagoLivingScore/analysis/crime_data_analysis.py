@@ -11,7 +11,7 @@ def load_frs_csv():
     Given a CSV containing crimes locations, return a list of points objects.
     """
     crime_points = []
-    file_path = pathlib.Path("./data/raw_data/crimes.csv")
+    file_path = pathlib.Path("../data/raw_data/crimes.csv")
     with file_path.open(mode="r") as file:
         reader = csv.DictReader(file)
         for row in reader:

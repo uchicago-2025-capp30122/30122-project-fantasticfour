@@ -71,7 +71,7 @@ def main(file_path):
     return processed_data
 
 
-file_path = Path("./data / raw_data / raw_data_eco_infra.csv")
+file_path = Path("../data/raw_data/raw_data_eco_infra.csv")
 zip_results = main(file_path)
 # Save Results
 print("Processing Complete. Results saved to 'cleaned_data_economic_infrastructure.csv'")
