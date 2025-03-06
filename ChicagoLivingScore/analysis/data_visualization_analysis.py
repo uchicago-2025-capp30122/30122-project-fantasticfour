@@ -59,6 +59,15 @@ def creat_bar_chats(df):
     combined = combine_charts(chart_best,chart_worst)
     return combined
 
+
+def create_heatmap_html(df):
+    chart = create_heatmap(df)
+    return chart.to_html()
+
+def create_bar_html(df):
+    chart = creat_bar_chats(df)
+    return chart.to_html()
+
 file_path = Path(__file__).parent.parent / "data" / "cleaned_data" / "final_living_score.csv"
 df = pd.read_csv(file_path)
 heatmap = create_heatmap(df)

@@ -10,7 +10,8 @@ import pathlib
 import webbrowser
 from threading import Timer
 import os
-from map.mapbuild import get_chicago_zip_geo, create_map, map_add_schools, map_show_avg_price, show_unemployed_score, show_trafic_score, show_education_score, show_crime_score, show_environment_score, show_final_score
+from map.mapbuild import get_chicago_zip_geo, create_map, show_unemployed_score, show_trafic_score, show_education_score, map_show_avg_price, show_crime_score, show_environment_score, show_final_score
+from analysis.data_visualization_analysis import create_heatmap, combine_charts, creat_bar_chats, create_heatmap_html, create_bar_html
 
 
 app = Flask(__name__)
@@ -91,7 +92,7 @@ def service():
                     "final_score": "N/A"
                 }
             # For GET requests, display the default map
-            m = map_add_schools(m, selected_zip=zipcode)
+            m = create_map(selected_zip=zipcode)
             map_html = m._repr_html_()
 
         # Handle keyword inputs to show specific indicators distribution
@@ -166,20 +167,21 @@ def analysis():
     For advanced queries, like input a zip code or some keywords (like 'school') to display data analysis
     """
     results = None
+    chart_html = None
     if request.method == "POST":
-        query = request.form.get("query")
+        query = request.form.get("query", "").strip().lower()
         # check whether the query is numeric or a keyword
-        if query and query.isdigit():
-            row = df_metrics.loc[df_metrics["zipcode"] == int(query)]
-            # Here is just example placeholder, waiting for analysis
-            if not row.empty:
-                results = f"Analysis results for ZIP code {query} => Education={row.iloc[0]['education_score']}, Crime={row.iloc[0]['crime_score']}..."
-            else:
-                results = f"No data found for ZIP code {query}"
+        if query == "top 5":
+            from analysis.data_visualization_analysis import create_bar_html
+            chart_html = create_bar_html(df_metrics)
+        elif query == "relationship":
+            from analysis.data_visualization_analysis import create_heatmap_html
+            chart_html = create_heatmap_html(df_metrics)
         else:
-            results = f"Analysis for keyword '{query}' is not implemented yet."
+            results = "Analysis is not implemented yet."
 
-    return render_template("analysis.html", results=results)
+
+    return render_template("analysis.html", results=results, chart_html=chart_html)
 
 
 
