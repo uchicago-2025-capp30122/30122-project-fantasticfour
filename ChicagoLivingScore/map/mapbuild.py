@@ -110,3 +110,68 @@ def map_add_schools(m, selected_zip=None):
     ).add_to(m)
 
     return m
+
+def map_show_avg_price(m,df_metrics): # df_metrics is the final_score_analysis that we already read in app.py
+    
+    df_price = df_metrics[["zipcode","avg_price_per_sqft"]]
+    df_price["zipcode"] = df_price["zipcode"].astype(int)
+    gdf_json = get_chicago_zip_geo().to_json()
+
+    folium.Choropleth(
+        geo_data=gdf_json,
+        data=df_price,
+        columns=["zipcode","avg_price_per_sqft"],
+        key_on="feature.properties.zip",
+        fill_color="YlOrRd",
+        bins=[100,200,300,400,500],
+        name="average house price",
+        highlight=True,
+        legend_name="Average price per square feet",
+        
+    ).add_to(m)
+    
+    return m
+
+
+def show_unemployed_score(m,df_metrics): # df_metrics is the final_score_analysis that we already read in app.py
+    
+    df_price = df_metrics[["zipcode","unemployed_score"]]
+    df_price["zipcode"] = df_price["zipcode"].astype(int)
+    gdf_json = get_chicago_zip_geo().to_json()
+
+    folium.Choropleth(
+        geo_data=gdf_json,
+        data=df_price,
+        columns=["zipcode","unemployed_score"],
+        key_on="feature.properties.zip",
+        fill_color="YlOrBr",
+        bins=[0,0.2,0.4,0.6,0.8,1.0],
+        name="unemployed rate",
+        highlight=True,
+        legend_name="unemployed rate",
+        
+    ).add_to(m)
+    
+    return m
+
+
+def show_trafic_score(m,df_metrics): # df_metrics is the final_score_analysis that we already read in app.py
+    
+    df_traffic = df_metrics[["zipcode","commute_time_score"]]
+    df_traffic["zipcode"] = df_traffic["zipcode"].astype(int)
+    gdf_json = get_chicago_zip_geo().to_json()
+
+    folium.Choropleth(
+        geo_data=gdf_json,
+        data=df_traffic,
+        columns=["zipcode","commute_time_score"],
+        key_on="feature.properties.zip",
+        fill_color="YlOrBr",
+        bins=[0,0.2,0.4,0.6,0.8,1.0],
+        name="commute time score",
+        highlight=True,
+        legend_name="commute time score",
+        
+    ).add_to(m)
+    
+    return m
