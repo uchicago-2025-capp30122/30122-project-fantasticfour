@@ -150,7 +150,7 @@ c. def info():
     Finally this function takes the csv file generated and adds the number of crimes
     and environmental hazards per zip code.
 
-*3. Scraped Dataset: Chicago Data for Schools*
+**Scraped Dataset: Chicago Data for Schools**
 
 Run **education_data_analysis.py**, to get the education score for each zip code. This is done
 through several functions that are linked together to get the data:
@@ -178,7 +178,7 @@ through several functions that are linked together to get the data:
         "school_survey_effective_leaders",
         "culture_climate_rating"
     ]
-    f. Also, for the zip codes that do not have any public school, they take the value of the average of the two nearest zip codes (
+    Also, for the zip codes that do not have any public school, they take the value of the average of the two nearest zip codes (
     For example if 60615 was missing then it would take the average of 60614 and 60616 given that there was data available).
     
 
