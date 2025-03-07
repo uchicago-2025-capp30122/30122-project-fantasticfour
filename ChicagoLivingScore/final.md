@@ -154,6 +154,7 @@ c. def info():
 
 Run **education_data_analysis.py**, to get the education score for each zip code. This is done
 through several functions that are linked together to get the data:
+
 a. load_data(file_path):
     This function loads the data and also cleans the strings.
 b.standardize_column(series):
