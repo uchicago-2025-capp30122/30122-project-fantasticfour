@@ -73,6 +73,7 @@ This project is structured in the following section
 ### Data Sources
 **1. Scraped Dataset: Housing Data from Zillow**
 **How to Use?**
+
 Step 1:
 
 Register on https://scrapfly.io/login to get the API key
@@ -105,46 +106,22 @@ Overall we utilized the API supported by Scrapefly, and we rewrote the code usin
 **Please see more deatails in the zillow.py by checking the comments**
 
 
-### How to Run
-```bash
-uv sync
-```
-**1) How to scrape data?**
-```bash
-Please see the **Data Source** section for more deatils
-```
-**2) How to clean and normalize the raw datsets?**
-   
-Example: housing datasets from Zillow
-```bash
-$ cd ChicagoLivingScore/analysis
-$ uv run python zillow_data_analysis.py
-```
+**2. Scraped Dataset: Map Data**
 
-**3) How to initiate the website**
-```bash
-$ cd ChicagoLivingScore/website
-$ uv run python app.py
-```
-**The Website is composted of 4 Parts, please use the navigation bar to see the deatils**
 
-**1) About**:
+**3. Index Dataset**
 
-the main page of website, where we can check the website function overview
+1) Infrastructure and Econ Dataset
 
-**2) Service**:
+2) Environment Dataset
 
-on this page, we can utilize the main function of our project, please input the zip code you want to explore in the search bar on the left side, then we will display the corresponding scores of this area, and this area will also pop out on the map.
+3) Crime Dataset
 
-(for now since we don't have the finalized analysis datasets yet, we will the sample score as placeholder)
+4) Education Dataset
 
-**3) Analysis**:
+5) Housing Price Dataset (scraped)
 
-on this page, we would like to display the overview of the datasets, like inputing certain zip code or metrics category (like education, environment), and we will display the visualization analysis of this category
 
-**4) Github**:
-
-link to our github
 
 
 
