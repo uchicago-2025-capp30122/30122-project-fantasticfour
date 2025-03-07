@@ -154,20 +154,20 @@ c. def info():
 
 Run **education_data_analysis.py**, to get the education score for each zip code. This is done
 through several functions that are linked together to get the data:
-    a. load_data(file_path):
+a. load_data(file_path):
     This function loads the data and also cleans the strings.
-    b.standardize_column(series):
+b.standardize_column(series):
     This function takes a series and helps standarize to compare between variables
     and zip codes.
-    c. map_categorical_values(df)
+c. map_categorical_values(df)
     This function maps the categorical values and maps them to an index between
     0 and 4.
-    d. compute_zip_level_metrics(df):
+d. compute_zip_level_metrics(df):
     This function aplies the stantarization to the variables we want to analize
     in the columns and obtains a score for each of the variables for each zip code.
-    e. Finally the main function, runs all of the previous function when the pycode
+e. Finally the main function, runs all of the previous function when the pycode
     is run and the csv file is created.
-    #Regarding the school information:
+#Regarding the school information:
     we took the sat scores for and approach to measure the academic score of 
     schools.
     For the non academic score, it was an average of several variable regarding
