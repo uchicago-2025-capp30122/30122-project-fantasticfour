@@ -20,17 +20,18 @@ def get_chicago_zip_geo():
     url = "https://data.cityofchicago.org/api/views/unjd-c2ca/rows.xml?accessType=DOWNLOAD"
     resp = httpx.get(url)
     html_text = resp.text
-    root = lxml.html.fromstring(html_text)
+    root = lxml.html.fromstring(html_text) # to get the root from the html
     
     polygon_lst = cssscraper(root, "the_geom")
     zip_lst = cssscraper(root, "zip")
-    objectid_lst = cssscraper(root, "objectid")
+    objectid_lst = cssscraper(root, "objectid") # get several components that we need
     
     data = []
     for i in range(0, len(polygon_lst)):
         data.append([polygon_lst[i], zip_lst[i], objectid_lst[i]])
     df = pd.DataFrame(data, columns=['geometry','zip','objectid'])
-    df['geometry'] = df['geometry'].apply(wkt.loads)
+    df['geometry'] = df['geometry'].apply(wkt.loads) 
+    # to load the multipolygon as geo information form
     
     def unify_zip(z):
         try:
@@ -70,7 +71,7 @@ def create_map(selected_zip=None):
                 'fillOpacity': 0.6,
             }
         )
-        folium.Popup(row["zip"]).add_to(geo)
+        folium.Popup(row["zip"]).add_to(geo) # to add the mark that has zip number 
         geo.add_to(m)
     return m
 
