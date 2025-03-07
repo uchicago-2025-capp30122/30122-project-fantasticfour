@@ -1,14 +1,20 @@
 import pytest
+import pandas as pd
 import pathlib
 from analysis.economic_infrastructure_analysis import main
 
 @pytest.fixture
 def df_eco():
-    data = pathlib.Path("./data/cleaned_data/cleaned_data_economic_infrastructure.csv")
-    return data
+    data_path = pathlib.Path("./data/cleaned_data/cleaned_data_economic_infrastructure.csv")
+    
+    # Ensure the file exists before reading
+    assert data_path.exists(), f"test failed: data not found!"
+    
+    # Load the CSV into a DataFrame
+    return pd.read_csv(data_path)
 
 def test_normalize_max(df_eco):
-    assert df_eco["unemployed"].max() <= 1, "Test failed: normalized value greater than 1 found!"
+    assert df_eco["unemployed"].max() <= 1, "test failed: normalized value greater than 1 found!"
 
 def test_chicago_zip(df_eco):
-    assert len(df_eco["zipcode"]) <= 60, "Test failed: you have more than actual zipcodes in Chicago"
+    assert len(df_eco["zipcode"].unique()) <= 60, "test failed: you have more zipcodes than actual ones in Chicago!"
