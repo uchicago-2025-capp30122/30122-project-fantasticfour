@@ -78,14 +78,15 @@ Source:  https://data.census.gov
 
 **2) Environment index**
 
-Source:
+Source:https://data.cityofchicago.org/Environment-Sustainable-Development/CDPH-Environmental-Complaints/fypr-ksnz/about_data
 
 **3) Education index**
 
-Source:
+Source: https://data.cityofchicago.org/Education/Chicago-Public-Schools-School-Progress-Reports-SY2/2dn2-x66j/about_data
 
 **4) Crime index**
 
+Source:https://data.cityofchicago.org/Public-Safety/Crimes-One-year-prior-to-present/x2n5-8w5q/about_data
 Source:
 
 
