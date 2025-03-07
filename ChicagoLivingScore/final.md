@@ -1,40 +1,33 @@
-### Team Members
-
-
-### Abstract
-This project develops an interactive, map-based platform to help individuals—especially those considering a move to Chicago—assess potential housing options. By incorporating data on education resources, transit infrastructure, public services, safety, and healthcare facilities near a chosen location, the platform offers a comprehensive overview of an area's livability.
-
-To streamline our evaluation process, we employ a structured Living Score framework. Inspired by Numbeo’s Quality of Life Index (QoL Matrix), we craft a tailored scoring system by selecting and integrating indicators from diverse sources, ensuring both breadth and local relevance. Our finalized indicators are as follows:
-
-**1. Housing Living Cost Index**：average housing price per sqft group by zip code
-
-**2. Overall Economic Index**: unemployment rate, walkability score, commute time, average income, and health insurance coverage
-
-**3. Crime Rate Index**: distribution of crime incidents
-
-**4. Education Index**: school performance, number of schools, and supportive resources
-
-**5. Environment Index**: number of parks, pollution reports
-
-When a user clicks on a Zip Code, the platform displays a detailed breakdown of these scores and an overall score. Users can further filter areas based on personal preferences (e.g., best family-friendly neighborhoods, safest locations, etc.). The system leverages **Folium and Flask** to deliver a fully interactive map-based website, enabling an engaging and insightful exploration of Chicago’s livability landscape.
-
-
 ### Project Structure
 
 ```bash
 ChicagoLivingScore/
 ├── .venv/
 ├── analysis/
-│   └── zillow_data_analysis.py
+│   └── all_data_normalize.py
+│   └── final_score_analysis.py
+│   └── data_visualization_analysis.py
+│   └── education_data_analysis.py
+│   └── crime_data_analysis.py
+│   └── ....(other index analysis file)
 ├── data/
 │   ├── cleaned_data/
-│   │   └── Housing_Data_Final.csv
+│   │   └── cleaned_data_crime.csv
+│   │   └── cleaned_data_economic_infrastructure.csv
+│   │   └── cleaned_data_education.csv
+│   │   └── cleaned_data_environment.csv
+│   │   └── cleaned_data_housing.csv
+│   │   └── final_living_score.csv
 │   └── raw_data/
-│       └── Housing_Data.csv
-├── map/ 
+│       └── raw_data_econ_infra.csv
+│       └── raw_data_housing.csv
+│       └── ....(other raw index datasets)
+├── map/
+│   ├── mapbuild.py
 ├── scraper/
 │   ├── scraper_data/
 │   │   └── zillow.py
+│   │   └── run.py
 ├── website/
 │   ├── static/
 │   ├── templates/
@@ -44,8 +37,6 @@ ChicagoLivingScore/
 ├── README.md
 └── ...
 ```
-
-
 
 #### Project Stucture Details
 This project is structured in the following section
