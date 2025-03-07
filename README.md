@@ -74,7 +74,7 @@ Helper website: https://scrapfly.io/blog/how-to-scrape-zillow/
 
 **1) Economic and infrastructure index**
 
-Source:
+Source:  https://data.census.gov
 
 **2) Environment index**
 
