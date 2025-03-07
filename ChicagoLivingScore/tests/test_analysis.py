@@ -4,7 +4,7 @@ from analysis.economic_infrastructure_analysis import main
 
 @pytest.fixture
 def df_eco():
-    data = Path(__file__).parent.parent / "data/raw_data/raw_data_eco_infra.csv"
+    data = file_path = Path("../data/raw_data/raw_data_eco_infra.csv")
     return main(data)
 
 def test_normalize_max(df_eco):
