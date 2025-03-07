@@ -1,11 +1,11 @@
 import pytest
-from pathlib import Path
+import pathlib
 from analysis.economic_infrastructure_analysis import main
 
 @pytest.fixture
 def df_eco():
-    data = Path("../data/raw_data/raw_data_eco_infra.csv")
-    return main(data)
+    data = pathlib.Path("./data/cleaned_data/cleaned_data_economic_infrastructure.csv")
+    return data
 
 def test_normalize_max(df_eco):
     assert df_eco["unemployed"].max() <= 1, "Test failed: normalized value greater than 1 found!"
