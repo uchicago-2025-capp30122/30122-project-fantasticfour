@@ -1,5 +1,6 @@
+import pytest
 from pathlib import Path
-from economic_infrastructure_analysis.analysis import main
+from analysis.economic_infrastructure_analysis import main
 
 data = Path(__file__).parent.parent / "data/raw_data/raw_data_eco_infra.csv"
 df_eco = main(data)
