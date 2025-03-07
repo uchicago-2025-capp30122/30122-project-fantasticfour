@@ -121,6 +121,67 @@ Overall we utilized the API supported by Scrapefly, and we rewrote the code usin
 
 5) Housing Price Dataset (scraped)
 
+**Scraped Dataset: Chicago Data for Crimes and Environment**
+*How to Use?*
+Step 1:
+
+Download the last zip code file with the shapefile of each zip code:
+"https://catalog.data.gov/dataset/tiger-line-shapefile-2022-nation-u-s-2020-census-5-digit-zip-code-tabulation-area-zcta5"
+
+Step 2:
+Open the *zips.py*, and run it:
+a. load_shapefile_with_cache(shp_path): 
+This will create a cache geodatainformation of the zips, that will allows us
+to match the locations of the crimes and environmental hazards to specific zip codes
+
+Step 3:
+Run **environmental_data_analysis.py**, and **crime_data_analysis.py** to get the data for each zip code. In each
+of these files there are three functions:
+a. load_frs_csv():This function loads the csv file of the crimes or environmental hazards
+and afterwards convert them to points objects.
+    ***In regards to crime information, we used only the data for crimes that 
+    ended in arrest and non domestic. This will help us focus the more severe 
+    crimes that people are more worried about.
+b. find_zip_codes(gdf_zip, points):
+    This function matches the points to the respetive zip code using both files obtained
+    And give us a list of points with their respective zip codes and also saves it
+    as a csv file.
+c. def info():
+    Finally this function takes the csv file generated and adds the number of crimes
+    and environmental hazards per zip code.
+
+*3. Scraped Dataset: Chicago Data for Schools*
+
+Run **education_data_analysis.py**, to get the education score for each zip code. This is done
+through several functions that are linked together to get the data:
+    a. load_data(file_path):
+    This function loads the data and also cleans the strings.
+    b.standardize_column(series):
+    This function takes a series and helps standarize to compare between variables
+    and zip codes.
+    c. map_categorical_values(df)
+    This function maps the categorical values and maps them to an index between
+    0 and 4.
+    d. compute_zip_level_metrics(df):
+    This function aplies the stantarization to the variables we want to analize
+    in the columns and obtains a score for each of the variables for each zip code.
+    e. Finally the main function, runs all of the previous function when the pycode
+    is run and the csv file is created.
+    #Regarding the school information:
+    we took the sat scores for and approach to measure the academic score of 
+    schools.
+    For the non academic score, it was an average of several variable regarding
+    other school characteristic such as:
+        categories = [
+        "creative_school_certification",
+        "school_survey_involved_families",
+        "school_survey_effective_leaders",
+        "culture_climate_rating"
+    ]
+    f. Also, for the zip codes that do not have any public school, they take the value of the average of the two nearest zip codes (
+    For example if 60615 was missing then it would take the average of 60614 and 60616 given that there was data available).
+    
+
 
 
 
