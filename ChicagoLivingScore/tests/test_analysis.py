@@ -10,7 +10,6 @@ def df_eco():
     # Ensure the file exists before reading
     assert data_path.exists(), f"test failed: data not found!"
     
-    # Load the CSV into a DataFrame
     return pd.read_csv(data_path)
 
 def test_normalize_max(df_eco):
