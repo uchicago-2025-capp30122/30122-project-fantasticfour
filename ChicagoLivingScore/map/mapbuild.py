@@ -7,6 +7,7 @@ from shapely import wkt
 import lxml.html
 import pathlib
 from shapely.geometry import Point
+import json
 
 
 BASE_DIR = pathlib.Path(__file__).parent
@@ -224,5 +225,15 @@ def show_final_score(m,df_metrics): # df_metrics is the final_score_analysis tha
         legend_name="final score",
         
     ).add_to(m)
-    
+
+    for feature in json.loads(gdf_json)["features"]:
+        zip_code = feature["properties"]["zip"]  # to get the zip number
+
+        popup = folium.Popup(zip_code) 
+        folium.GeoJson(
+            feature,
+            popup=popup, # place the zip into the map
+            style_function=lambda x: {"fillOpacity": 0, "color": "black", "weight": 1} 
+        ).add_to(m)
+
     return m

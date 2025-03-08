@@ -41,6 +41,7 @@ def about():
     m = folium.Map(location=[41.8781, -87.6298], zoom_start=11, tiles='cartodbpositron')
     m = show_final_score(m, df_metrics)
     map_html = m._repr_html_()
+
     return render_template("about.html", map_html=map_html)
 
 # Construct the main functionality of the website - Service page
