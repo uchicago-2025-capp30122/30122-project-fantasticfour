@@ -1,11 +1,11 @@
 import pytest
 import pandas as pd
-import pathlib
+from pathlib import Path
 from analysis.economic_infrastructure_analysis import main
 
 @pytest.fixture
 def df_eco():
-    data_path = pathlib.Path("./data/cleaned_data/cleaned_data_economic_infrastructure.csv")
+    data_path = Path("ChicagoLivingScore/data/cleaned_data/cleaned_data_economic_infrastructure.csv")
     
     # Ensure the file exists before reading
     assert data_path.exists(), f"test failed: data not found!"
