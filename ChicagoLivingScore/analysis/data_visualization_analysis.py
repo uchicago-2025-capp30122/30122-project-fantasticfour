@@ -6,7 +6,7 @@ import altair as alt
 def create_heatmap(df):
     heatmap = alt.Chart(df).mark_rect().encode(
         x=alt.X('zipcode:N', title='Zip Code'),
-        y=alt.Y('final_score:N', title='Indicator'),
+        y=alt.Y('final_score:N', title='Indicator', sort="-y"),
         color=alt.Color('final_score:Q', scale=alt.Scale(scheme='viridis')),  # Color based on score
         tooltip=['zipcode', 'avg_income_score', 'crime_score', 'avg_price_per_sqft','final_score']
     ).transform_fold(
@@ -47,7 +47,7 @@ def creat_bar_chats(df):
     )
     
     chart_worst = alt.Chart(worst_places).mark_bar(color="salmon").encode(
-        x=alt.X('zipcode:N', sort='-y', title='Zipcode'),
+        x=alt.X('zipcode:N', sort='y', title='Zipcode'),
         y=alt.Y('final_score:Q', title='worst overall'),
         tooltip=['zipcode', 'final_score']
     ).properties(
