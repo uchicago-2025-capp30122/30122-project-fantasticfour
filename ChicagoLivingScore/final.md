@@ -173,8 +173,11 @@ d. compute_zip_level_metrics(df):
     This function aplies the stantarization to the variables we want to analize
     in the columns and obtains a score for each of the variables for each zip code.
     
-e. Finally the main function, runs all of the previous function when the pycode
+e. The main function, runs all of the previous function when the pycode
     is run and the csv file is created.
+    
+f. Finally because some of the zip codes do not have any public school, we calculate the value of the average of the two nearest zip codes 
+and input it to them(For example if 60615 was missing then it would take the average of 60614 and 60616 given that there was data available).
     
 #Regarding the school information:
     we took the sat scores for and approach to measure the academic score of 
@@ -190,8 +193,6 @@ e. Finally the main function, runs all of the previous function when the pycode
     ]
 
     
-    Also, for the zip codes that do not have any public school, they take the value of the average of the two nearest zip codes (
-    For example if 60615 was missing then it would take the average of 60614 and 60616 given that there was data available).
     
 
 
