@@ -2,7 +2,7 @@
 name = "ChicagoLivingScore"
 version = "0.1.0"
 description = "A Flask-based web application for analyzing Chicago living scores"
-readme = "README.md"
+readme = "final.md"
 requires-python = ">=3.10"
 
 dependencies = [
