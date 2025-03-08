@@ -188,6 +188,7 @@ e. Finally the main function, runs all of the previous function when the pycode
         "school_survey_effective_leaders",
         "culture_climate_rating"
     ]
+
     
     Also, for the zip codes that do not have any public school, they take the value of the average of the two nearest zip codes (
     For example if 60615 was missing then it would take the average of 60614 and 60616 given that there was data available).
