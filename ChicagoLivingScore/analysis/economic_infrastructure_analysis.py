@@ -28,6 +28,13 @@ def normalize(df):
 
 
 def normalize_data(file_path):
+    """ this functions takes a csv file of all locations and fillters them by the 
+    zipcodes of Chicago area and then normalizes the data and finally outputs the 
+    csv
+    inputs:
+            file_path : file path to the raw data
+    returns:
+            normalized csv file """
     
     df = load_data_clean(file_path)
     columns_to_keep = [
