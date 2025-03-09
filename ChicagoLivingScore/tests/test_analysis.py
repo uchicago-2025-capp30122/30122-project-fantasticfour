@@ -1,16 +1,14 @@
 import pytest
 import pandas as pd
 from pathlib import Path
-from analysis.economic_infrastructure_analysis import main
+#from analysis.economic_infrastructure_analysis import main
 
 @pytest.fixture
 def df_eco():
-    BASE_DIR = Path(__file__).parent.parent
-    DATA_FILE = BASE_DIR / "data" / "cleaned_data" /  "cleaned_data_economic_infrastructure.csv"
-    # Ensure the file exists before reading
-    assert DATA_FILE.exists(), f"test failed: data not found!"
-    
-    return pd.read_csv(DATA_FILE)
+    file_path = Path("data/cleaned_data/cleaned_data_economic_infrastructure.csv")
+    # chek if data loads correctly
+    assert file_path.exists(), f"test failed: data not found!"
+    return pd.read_csv(file_path)
 
 def test_normalize_max(df_eco):
     assert df_eco["unemployed"].max() <= 1, "test failed: normalized value greater than 1 found!"
