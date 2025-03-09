@@ -176,9 +176,63 @@ def analysis():
         if query == "top 5":
             from analysis.data_visualization_analysis import create_bar_html
             chart_html = create_bar_html(df_metrics)
+            results = (
+                "<strong>Top 5 Zip Codes (Overall Best):</strong><br>"
+                "1) 60606 (Downtown/Loop)<br>"
+                "&bull; Located in Chicago's business district.<br>"
+                "&bull; High-income community with a strong job market.<br>"
+                "&bull; Excellent public transportation and walkability.<br>"
+                "&bull; Low crime rates due to intense commercial activity and security.<br><br>"
+                "2) 60603 (Loop)<br>"
+                "&bull; Business-concentrated area with high employment.<br>"
+                "&bull; High-end housing options and strong economic activity.<br>"
+                "&bull; High walkability score.<br><br>"
+                "3) 60601 (New East Side)<br>"
+                "&bull; High-end high-rises near Millennium Park and the lakefront.<br>"
+                "&bull; Well-educated population with access to premium amenities.<br>"
+                "&bull; Low unemployment and strong economic indicators.<br><br>"
+                "4) 60604 (South Loop)<br>"
+                "&bull; Mix of residential and commercial development.<br>"
+                "&bull; Close to cultural attractions, universities, and office spaces.<br>"
+                "&bull; Urban development with rising property values.<br><br>"
+                "5) 60661 (West Loop)<br>"
+                "&bull; Trendy neighborhood attracting young professionals.<br>"
+                "&bull; Close to top restaurants and tech hubs (e.g., Google’s Chicago office).<br>"
+                "&bull; Growing residential developments with luxury living spaces.<br><br>"
+                "<strong>Worst 5 Zip Codes (Worst Overall):</strong><br>"
+                "1) 60628 (Roseland)<br>"
+                "&bull; Historically disinvested with high unemployment.<br>"
+                "&bull; Crime and safety concerns affecting livability.<br>"
+                "&bull; Limited economic development and infrastructure investment.<br><br>"
+                "2) 60620 (Auburn Gresham)<br>"
+                "&bull; Faces socioeconomic challenges and underfunded public services.<br>"
+                "&bull; Limited public transit access compared to central Chicago.<br><br>"
+                "3) 60624 (Garfield Park)<br>"
+                "&bull; One of Chicago's most disinvested communities.<br>"
+                "&bull; High crime, unemployment, and housing instability.<br><br>"
+                "4) 60619 (Chatham/South Side)<br>"
+                "&bull; Middle-class area facing economic decline and rising crime.<br><br>"
+                "5) 60644 (Austin)<br>"
+                "&bull; Large area with significant challenges including high crime and poverty.<br>"
+            )
         elif query == "relationship":
             from analysis.data_visualization_analysis import create_heatmap_html
             chart_html = create_heatmap_html(df_metrics)
+            results = (
+                "<strong>Best Places to Live (Top Scoring Zip Codes - Yellow/Green):</strong><br>"
+                "For a high quality of life, safety, and access to amenities, the highest-scoring ZIP codes (mostly in yellow and green) are ideal. "
+                "They typically exhibit strong economic activity, good schools, a clean environment, low crime, and excellent walkability. "
+                "Top areas include:<br>"
+                "- Loop (60601, 60602, 60603, 60606)<br>"
+                "- Near North Side (60610, 60611, 60654)<br>"
+                "- Lincoln Park (60614)<br><br>"
+                "<strong>Affordable Yet Livable Areas (Moderate Scoring Zip Codes - Green/Blue):</strong><br>"
+                "For those balancing affordability and quality of life, mid-range ZIP codes in green and blue are worth considering, offering decent safety and "
+                "improving economic conditions. Examples include:<br>"
+                "- Logan Square (60647)<br>"
+                "- West Loop (60607)<br>"
+                "- Uptown (60640)"
+            )
         else:
             results = "Analysis is not implemented yet."
 
