@@ -1,6 +1,8 @@
 from pathlib import Path
 import pandas as pd
 
+# This file aims at cleaning and analyzing useful econ and infra related variables
+
 
 def load_data_clean(file_path):
     """loads and cleans the data"""

@@ -8,6 +8,10 @@ import geopandas as gpd
 import csv
 import json
 
+
+
+# This file aims at cleaning and analyzing useful environment related variables
+
 def load_frs_csv():
     """
     Given a CSV containing enviromental incidents

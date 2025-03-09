@@ -21,7 +21,7 @@ BASE_DIR = pathlib.Path(__file__).parent.parent
 DATA_FILE = BASE_DIR / "data" / "cleaned_data" / "final_living_score.csv"
 df_metrics = pd.read_csv(DATA_FILE)
 
-
+# return 2 decimals
 def format_score(val):
     if pd.isnull(val):
         return "N/A"
@@ -189,9 +189,6 @@ def analysis():
 
 @app.route("/github")
 def github():
-    """
-    Github page: link to your GitHub repository
-    """
     return render_template("github.html")
 
 

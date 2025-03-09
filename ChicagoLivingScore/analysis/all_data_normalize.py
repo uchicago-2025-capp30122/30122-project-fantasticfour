@@ -3,6 +3,11 @@ warnings.simplefilter(action="ignore", category=FutureWarning)
 import pandas as pd
 import pathlib
 
+
+# This profile aims at standardizing a function to deal with the raw datasets
+# by using Min-Max normalization
+# so as to deal with newly added raw datasets more efficiently
+
 class DataNormalizer:
     def __init__(self):
         self.base_dir = pathlib.Path(__file__).parent.parent

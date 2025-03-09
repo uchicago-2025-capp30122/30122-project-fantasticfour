@@ -3,6 +3,7 @@ import numpy as np
 import pathlib
 import geopandas as gpd
 
+# This file aims at cleaning and analyzing useful education related variables
 
 
 def load_data(file_path):
