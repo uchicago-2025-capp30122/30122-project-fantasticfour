@@ -13,5 +13,11 @@ def df_eco():
 def test_normalize_max(df_eco):
     assert df_eco["unemployed"].max() <= 1, "test failed: normalized value can't be greater than 1"
 
+def test_normalize_max_walked(df_eco):    
+    assert df_eco["walked"].max() <= 1, "test failed: normalized value can't be greater than 1"
+    
+def test_normalize_max_time(df_eco):    
+    assert df_eco["mean travel time to work (minutes)"].max() >= 0, "test failed: normalized value can't be less than 0"  
+
 def test_chicago_zip(df_eco):
     assert len(df_eco["zipcode"].unique()) <= 60, "test failed: more zipcodes than actual ones in Chicago"
