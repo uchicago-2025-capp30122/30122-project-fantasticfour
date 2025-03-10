@@ -60,6 +60,7 @@ This project is structured in the following section
         change url for scraping (\run.py)
 
 - Map and Spatial Analysis(\map)
+    - main function (\mapbuilder.py) 
 
 - Interactive Website(\website)
     - main function (\app.py)
