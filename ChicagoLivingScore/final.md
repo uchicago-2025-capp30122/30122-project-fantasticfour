@@ -70,6 +70,8 @@ This project is structured in the following section
       
         static(style.css)
 
+### Project Workflow
+![project workdlow](workflow.png)
 
 ### Data Sources
 **1. Scraped Dataset: Housing Data from Zillow**
