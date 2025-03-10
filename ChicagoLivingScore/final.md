@@ -60,6 +60,7 @@ This project is structured in the following section
         change url for scraping (\run.py)
 
 - Map and Spatial Analysis(\map)
+    - main function (\mapbuilder.py) 
 
 - Interactive Website(\website)
     - main function (\app.py)
@@ -120,6 +121,28 @@ Overall we utilized the API supported by Scrapefly, and we rewrote the code usin
 4) Education Dataset
 
 5) Housing Price Dataset (scraped)
+
+**Scraped Dataset: Economic and infrastructure indicators from US Census Bureau**
+
+Run **economic_infrastructure_analysis.py**, to get the socres for ecnonmic and infrastructure score for each zip code in Chicago.
+This is done through several functions that are linked together to get the data:
+
+a.  load_data(file_path):
+    This function loads the data and also cleans the strings.
+    
+b.  normalize(df):
+    This function takes a dataframe and helps normalize data for it to be compared between variables and zip codes.
+    
+c.  nornamlize_data(file_path)
+    Uses the above mentioned helper functions and brings everything together. This function outputs a csv file 
+    with all the cleaned and normalized data and saves it as cleaned_data_infrastructure.csv which is then used for our analysis
+        
+d.  The main function, runs all of the previous function when the pycode
+    is run and the csv file is created.
+    
+#Regarding the indicators:
+Our cleaned file has 6 indicators that provides a holistic view about the economic condition along with 
+walability and mean travel times to work for each zip code in Chicago. 
 
 **Scraped Dataset: Chicago Data for Crimes and Environment**
 *How to Use?*
@@ -191,6 +214,22 @@ and input it to them(For example if 60615 was missing then it would take the ave
         "school_survey_effective_leaders",
         "culture_climate_rating"
     ]
+
+**Analysis** 
+
+Our analysis section features two graphs that provide a comprehensive overview of living conditions across various zip codes in Chicago. 
+The analysis addresses our primary question: **Where are the top best and worst places to live in Chicago?**
+
+In addition to these graphs, we have included a heatmap that offers a snapshot of where each zip code stands based on its final score, 
+calculated from our selected metrics. Each graph is accompanied by a brief written analysis to further explain its insights.
+
+To view the bar chart ranking the top five best and worst places to live, enter "top 5" in the search bar under the analysis page.
+Similarly, you can access the heatmap by entering "relationship" in the search bar.
+
+
+
+
+
 
     
     

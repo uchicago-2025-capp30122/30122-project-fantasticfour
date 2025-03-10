@@ -14,7 +14,7 @@
 
 {% if results %}
 <div class="alert alert-primary mt-4 text-center" style="max-width: 600px; margin: 20px auto;">
-  {{ results }}
+  {{ results|safe }}
 </div>
 {% endif %}
 

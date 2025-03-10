@@ -1,6 +1,7 @@
 import pandas as pd
 from pathlib import Path
 
+# Correct zipcode list
 chicago_zipcodes = [
     60601, 60602, 60603, 60604, 60605, 60606, 60607, 60608, 60609, 60610, 60611, 
     60612, 60613, 60614, 60615, 60616, 60617, 60618, 60619, 60620, 60621, 60622, 

@@ -6,6 +6,11 @@ import pathlib
 import pandas as pd
 import numpy as np
 
+# This file aims at cleaning housing data from Zillow
+# Transform raw datasets 
+# Normalize dataset by Min-Max normalization
+# Generate new metrics "average housing price per sqft group by zip code"
+
 
 class HousingDataProcessor:
     def __init__(self):

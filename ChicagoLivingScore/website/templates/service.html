@@ -3,14 +3,30 @@
 <div class="row">
   <!-- Left column: Search input and results card -->
   <div class="col-md-4">   
-    <h5>Enter Zip Code to Search Living Scores</h5>
-    <form action="{{ url_for('service') }}" method="POST">  <!-- Form that calls the 'service' route -->
+    <!-- Instruction -->
+    <h5 class="mb-3">How to Use the Service</h5>
+    <p style="font-size: 0.9rem;">
+      <strong>Option 1:</strong> Enter a <em>ZIP Code</em> (e.g., <strong>60605</strong>) to get a detailed breakdown of 
+      that area's scores and the final living score.<br><br>
+      <strong>Option 2:</strong> Enter an <em>indicator name</em> from the list 
+      (<strong>education, crime, environment, traffic, housing, unemployment, final</strong>)
+      to see a color-coded map showing how different areas perform on that indicator.
+    </p>
+    
+    
+    <!-- Search Part -->
+    <form action="{{ url_for('service') }}" method="POST">
       <div class="form-group">
-        <input type="text" name="zipcode" id="zipcode" class="form-control" placeholder="Example: 60614 or education" required>
+        <input type="text" 
+               name="zipcode" 
+               id="zipcode" 
+               class="form-control" 
+               placeholder="Example: 60614 or crime" 
+               required>
       </div>
       <button type="submit" class="btn btn-success btn-block">Search</button>
     </form>
-    
+
     <!-- If zip_data exists, display the corresponding scores in a card -->
     {% if zip_data %}
     <div class="card mt-3"> 

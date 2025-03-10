@@ -2,6 +2,10 @@ from pathlib import Path
 import pandas as pd
 import altair as alt
 
+
+# This file aims at analyzing the final results based on different zipcode scores, index scores, final scores
+
+
 # provides us with a heatmap of all the zipcodes and their indicators
 def create_heatmap(df):
     heatmap = alt.Chart(df).mark_rect().encode(
@@ -59,7 +63,7 @@ def creat_bar_chats(df):
     combined = combine_charts(chart_best,chart_worst)
     return combined
 
-
+# Add output function for being called in website function
 def create_heatmap_html(df):
     chart = create_heatmap(df)
     return chart.to_html()

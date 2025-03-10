@@ -3,6 +3,12 @@ import numpy as np
 from pathlib import Path
 import geopandas as gpd
 
+<<<<<<< HEAD
+=======
+# This file aims at cleaning and analyzing useful education related variables
+
+
+>>>>>>> 364e0ed21f46dc5724ef9df32e4ec3c3b2e15924
 def load_data(file_path):
     df = pd.read_csv(file_path)
     df.columns = df.columns.str.lower().str.strip() 

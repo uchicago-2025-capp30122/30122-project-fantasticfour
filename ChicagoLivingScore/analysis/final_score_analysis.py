@@ -1,6 +1,11 @@
 import pandas as pd
 import pathlib
 
+
+# This file aims at calculating the final living score based on various index weight
+# Return finalized different index score and final score as website visualization
+
+
 class FinalScoreCalculator:
     def __init__(self):
         self.base_dir = pathlib.Path(__file__).parent.parent
@@ -25,15 +30,16 @@ class FinalScoreCalculator:
         df[zip_col] = df[zip_col].apply(self.normalize_zip)
         return df
     
-
+    # Impute missing values by using the average of the values from the 4 nearest ZIP codes (based on absolute difference of ZIP code)
+    # suggestion: OpenAI
     def impute_by_nearest(self, df, col):
         df = df.copy()
         df['zip_int'] = df['zipcode'].astype(int)
         
-        missing_idx = df[df[col].isnull()].index
+        missing = df[df[col].isnull()].index
         
-        for idx in missing_idx:
-            current_zip = df.loc[idx, 'zip_int']
+        for i in missing:
+            current_zip = df.loc[i, 'zip_int']
             valid = df[df[col].notnull()]
             if valid.empty:
                 continue  
@@ -41,12 +47,13 @@ class FinalScoreCalculator:
             nearest = valid.nsmallest(4, 'distance')
 
             mean_val = nearest[col].mean()
-            df.loc[idx, col] = mean_val
+            df.loc[i, col] = mean_val
         
        
         df.drop(columns=['zip_int'], inplace=True)
         return df
 
+    # Merge all the index score based on "zipcode" then calculate the final score based on various weight
     def merge_data(self):
         """    
         final_score = 
