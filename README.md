@@ -34,6 +34,14 @@ Leveraging **Folium for map visualizations and Flask for backend integration**, 
 
 
 
+### Project Visualization
+![Main Page](website1.png)
+![Service Page - Enter zip code](website2.png)
+![Service Page - Enter index name](website3.png)
+![Analysis Page](website4.png)
+![Analysis Page](website5.png)
+
+
 ### How to Use?
 **Step 1:**
 
