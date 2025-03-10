@@ -127,6 +127,7 @@ Overall we utilized the API supported by Scrapefly, and we rewrote the code usin
 **Scraped Dataset: Economic and infrastructure indicators from US Census Bureau**
 
 Run **economic_infrastructure_analysis.py**, to get the socres for ecnonmic and infrastructure score for each zip code in Chicago.
+
 This is done through several functions that are linked together to get the data:
 
 a.  load_data(file_path):
@@ -217,7 +218,7 @@ and input it to them(For example if 60615 was missing then it would take the ave
         "culture_climate_rating"
     ]
 
-**Analysis** 
+#### Analysis
 
 Our analysis section features two graphs that provide a comprehensive overview of living conditions across various zip codes in Chicago. 
 The analysis addresses our primary question: **Where are the top best and worst places to live in Chicago?**
@@ -228,7 +229,25 @@ calculated from our selected metrics. Each graph is accompanied by a brief writt
 To view the bar chart ranking the top five best and worst places to live, enter "top 5" in the search bar under the analysis page.
 Similarly, you can access the heatmap by entering "relationship" in the search bar.
 
+### Team Responsibilities
+**Lydia Liu**
+1. Establish index scoring and calculation methodologies (group collaboration)
+   
+2. Scrape the housing dataset from Zillow.
+   
+3. Clean, normalize, and analyze the housing data.
+   
+4. Implement a standardized normalization procedure.
+   
+5. Build the website.
 
+6. Wrote milstones update and final report.
+
+**Yuri Chang**
+
+**Hamza Tariq**
+
+**Alejandro Armas**
 
 
 
