@@ -166,13 +166,14 @@ def show_education_score(m,df_metrics): # df_metrics is the final_score_analysis
 def show_crime_score(m,df_metrics): # df_metrics is the final_score_analysis that we already read in app.py
     
     df_use = df_metrics[["zipcode","crime_score"]]
+    df_use[["crime_score_norm"]] = 1 - df_use[["crime_score"]]
     df_use["zipcode"] = df_use["zipcode"].astype(str)
     gdf_json = get_chicago_zip_geo().to_json()
 
     folium.Choropleth(
         geo_data=gdf_json,
         data=df_use,
-        columns=["zipcode","crime_score"],
+        columns=["zipcode","crime_score_norm"],
         key_on="feature.properties.zip",
         fill_color="YlGn",
         bins=[0,0.2,0.4,0.6,0.8,1.0],
