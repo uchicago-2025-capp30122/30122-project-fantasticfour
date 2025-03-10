@@ -1,4 +1,5 @@
 import pandas as pd
+from pathlib import Path
 
 chicago_zipcodes = [
     60601, 60602, 60603, 60604, 60605, 60606, 60607, 60608, 60609, 60610, 60611, 
@@ -9,6 +10,7 @@ chicago_zipcodes = [
     60660, 60661, 60666, 60707, 60827
     ]
 
-
+BASE_DIR = Path(__file__).parent.parent
+DATA_FILE = BASE_DIR / "data" / "cleaned_data" /"chicago_zip.csv"
 df = pd.DataFrame(chicago_zipcodes, columns=["zip_code"])
-df.to_csv("../data/cleaned_data/chicago_zip.csv", index=False)
+df.to_csv(DATA_FILE, index=False)

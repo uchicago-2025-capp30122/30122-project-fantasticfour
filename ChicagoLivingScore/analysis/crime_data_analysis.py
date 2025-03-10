@@ -1,17 +1,16 @@
 from shapely.geometry import Point
 from shapely import wkt
-from zips import load_shapefile_with_cache
+from analysis.zips import load_shapefile_with_cache
 import pandas as pd
 import pathlib
 import geopandas as gpd
 import csv
 
-def load_frs_csv():
+def load_frs_csv(file_path):
     """
     Given a CSV containing crimes locations, return a list of points objects.
     """
     crime_points = []
-    file_path = pathlib.Path("../data/raw_data/crimes.csv")
     with file_path.open(mode="r") as file:
         reader = csv.DictReader(file)
         for row in reader:
@@ -43,9 +42,11 @@ def find_zip_codes(gdf_zip, points):
     return gdf_joined[['lat', 'lon', 'ZCTA5CE20']]
 
 def info():
-    shp_file = pathlib.Path("./data/raw_data/Zips/tl_2020_us_zcta520.shp")
+    BASE_DIR = pathlib.Path(__file__).parent.parent
+    shp_file = BASE_DIR / "data" / "raw_data" /"Zips"/  "tl_2020_us_zcta520.shp"
+    file_path = BASE_DIR / "data" / "raw_data" / "crimes.csv"
     zips=load_shapefile_with_cache(shp_file)
-    find_zip_codes(zips,load_frs_csv())
+    find_zip_codes(zips,load_frs_csv(file_path))
     df = pd.read_csv("./data/raw_data/crimes_zip.csv")
     zip_codes_df = pd.read_csv("./data/cleaned_data/chicago_zip.csv")
     zip_column = "ZCTA5CE20"
@@ -55,4 +56,5 @@ def info():
     total_per_zip = df_filtered.groupby(zip_column).size().reset_index(name="count")
     total_per_zip.to_csv("./data/cleaned_data/cleaned_data_crime.csv", index=False)
     return 
-info()
+if __name__ == '__main__':
+    info()

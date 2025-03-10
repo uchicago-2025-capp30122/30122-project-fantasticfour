@@ -1,9 +1,7 @@
 import pandas as pd
 import numpy as np
-import pathlib
+from pathlib import Path
 import geopandas as gpd
-
-
 
 def load_data(file_path):
     df = pd.read_csv(file_path)
@@ -85,26 +83,6 @@ def compute_zip_level_metrics(df):
 
     return zip_results
 
-# Main Execution
-def main(file_path):
-    df = load_data(file_path)
-    df = map_categorical_values(df)
-    zip_results = compute_zip_level_metrics(df)
-    return zip_results
-
-file_path = "../data/raw_data/Chicago_Public_Schools_2024.csv"
-zip_results = main(file_path)
-zip_results.reset_index(inplace=True)
-zip_results.rename(columns={"index": "zip_code"}, inplace=True)
-zip_results.to_csv("./data/cleaned_data/cleaned_data_education.csv", index=False)
-all_zip_codes = pd.read_csv("./data/cleaned_data/chicago_zip.csv")
-info_zip_codes = pd.read_csv("./data/cleaned_data/cleaned_data_education.csv")
-zip_col = "zip_code"
-all_zip_codes[zip_col] = all_zip_codes[zip_col].astype(int)
-info_zip_codes[zip_col] = info_zip_codes[zip_col].astype(int)
-
-all_zip_codes = all_zip_codes.sort_values(by=zip_col).reset_index(drop=True)
-zip_info_dict = info_zip_codes.set_index(zip_col).to_dict(orient="index")
 
 def find_nearest_values(zip_code):
     step = 1
@@ -131,20 +109,41 @@ def find_nearest_values(zip_code):
 
     return pd.Series(found_values)
 
-missing_zips = all_zip_codes[~all_zip_codes[zip_col].isin(info_zip_codes[zip_col])]
-missing_values_df = missing_zips[zip_col].apply(find_nearest_values)
-missing_zips = pd.concat([missing_zips, missing_values_df], axis=1)
-final_data = pd.concat([info_zip_codes, missing_zips], ignore_index=True)
-final_data = final_data.sort_values(by=zip_col).reset_index(drop=True)
+# Main Execution
+def main(file_path):
+    df = load_data(file_path)
+    df = map_categorical_values(df)
+    zip_results = compute_zip_level_metrics(df)
+    return zip_results
 
-final_data.to_csv("./data/cleaned_data/cleaned_data_education.csv", index=False)
+if __name__ == '__main__':
+    BASE_DIR = Path(__file__).parent.parent
+    file_path = BASE_DIR / "data" / "raw_data"/  "Chicago_Public_Schools_2024.csv"
+    zip_results = main(file_path)
+    zip_results.reset_index(inplace=True)
+    zip_results.rename(columns={"index": "zip_code"}, inplace=True)
+    zip_results.to_csv("./data/cleaned_data/cleaned_data_education.csv", index=False)
+    all_zip_codes = pd.read_csv("./data/cleaned_data/chicago_zip.csv")
+    info_zip_codes = pd.read_csv("./data/cleaned_data/cleaned_data_education.csv")
+    zip_col = "zip_code"
+    all_zip_codes[zip_col] = all_zip_codes[zip_col].astype(int)
+    info_zip_codes[zip_col] = info_zip_codes[zip_col].astype(int)
 
+    all_zip_codes = all_zip_codes.sort_values(by=zip_col).reset_index(drop=True)
+    zip_info_dict = info_zip_codes.set_index(zip_col).to_dict(orient="index")
 
-# generate a education csv file that has locations of schools 
-BASE_DIR = pathlib.Path(__file__).parent.parent
-INPUT_FILE = BASE_DIR / "data" / "raw_data" / "education.csv"
-OUTPUT_FILE = BASE_DIR / "data" / "cleaned_data"/"cleaned_education.csv"
+    missing_zips = all_zip_codes[~all_zip_codes[zip_col].isin(info_zip_codes[zip_col])]
+    missing_values_df = missing_zips[zip_col].apply(find_nearest_values)
+    missing_zips = pd.concat([missing_zips, missing_values_df], axis=1)
+    final_data = pd.concat([info_zip_codes, missing_zips], ignore_index=True)
+    final_data = final_data.sort_values(by=zip_col).reset_index(drop=True)
 
-original_df = gpd.read_file(INPUT_FILE)
-gdf_edu = gpd.GeoDataFrame(original_df[['School_ID', 'Short_Name', 'Long_Name', 'School_Type','School_Latitude','School_Longitude','Website',"Creative_School_Certification"]]) # use variables we need
-gdf_edu.to_csv(OUTPUT_FILE, index=False, encoding="utf-8")
+    final_data.to_csv("./data/cleaned_data/cleaned_data_education.csv", index=False)
+    # generate a education csv file that has locations of schools 
+    BASE_DIR = Path(__file__).parent.parent
+    INPUT_FILE = BASE_DIR / "data" / "raw_data" / "education.csv"
+    OUTPUT_FILE = BASE_DIR / "data" / "cleaned_data"/"cleaned_education.csv"
+
+    original_df = gpd.read_file(INPUT_FILE)
+    gdf_edu = gpd.GeoDataFrame(original_df[['School_ID', 'Short_Name', 'Long_Name', 'School_Type','School_Latitude','School_Longitude','Website',"Creative_School_Certification"]]) # use variables we need
+    gdf_edu.to_csv(OUTPUT_FILE, index=False, encoding="utf-8")
