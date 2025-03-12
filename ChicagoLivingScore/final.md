@@ -244,6 +244,13 @@ Similarly, you can access the heatmap by entering "relationship" in the search b
 6. Wrote milstones update and final report.
 
 **Yuri Chang**
+1. Scrape and Establish Geodata of the city of Chicago.
+
+2. Help scrape the housing dataset from Zillow.
+
+3. Help clean and modify the data.
+
+4. Draw the maps.
 
 **Hamza Tariq**
 
