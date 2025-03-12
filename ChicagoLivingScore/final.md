@@ -267,6 +267,19 @@ Similarly, you can access the heatmap by entering "relationship" in the search b
 
 **Alejandro Armas**
 
+1. Establish index matric and calculation methodolgies (group collaboration)
+   
+2. Collect crime, education and environmental dataset
+
+3. Loaded the shapefiles of several zip codes to match it with the dataset
+
+4. Clean and normalize crime, education and enviromental data
+
+5. Draw the workflow
+
+
+
+
 
 
 
