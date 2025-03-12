@@ -253,6 +253,17 @@ Similarly, you can access the heatmap by entering "relationship" in the search b
 4. Draw the maps.
 
 **Hamza Tariq**
+1. Establish index matric and calculation methodolgies (group collaboration)
+
+2. Helped scrape housing dataset from zillow
+   
+3. Collect economic and infrastructure dataset
+
+4. Clean, normalize and analyze economic and infrastructure data
+
+5. Conducted analysis of the overall data sets
+
+6. Developed data visualization graphs
 
 **Alejandro Armas**
 
